@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/app-sidebar";
 import WelcomeContainer from "./dashboard/_components/WelcomeContainer";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Layout({ children }) {
   return (
@@ -11,7 +12,7 @@ export default function Layout({ children }) {
           {/* <SidebarTrigger /> */}
         </span>
         <WelcomeContainer />
-
+         <Toaster />
         <div className="p-10">{children}</div>
       </div>
     </SidebarProvider>

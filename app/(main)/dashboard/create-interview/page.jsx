@@ -2,21 +2,39 @@
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
 import Form_container from "./components/Form_container";
 import Questions_list from "./components/Questions_list";
+import { toast } from "sonner";
+import InterviewLink from "./components/InterviewLink";
 
 function CreateInterview() {
   const router = useRouter();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
+  const [InterviewId, setInterviewId] = useState();
 
-  const [formdata, setFormdata] = useState();
+  const [formdata, setFormdata] = useState({});
+
+  //formadata yahan se aa rha
   const onhandleInputChange = (field, value) => {
     setFormdata((prev) => ({ ...prev, [field]: value }));
   };
 
-  console.log(formdata);
+  // console.log(formdata,formdata)
+
+  const ongotoNext = () => {
+    if (Object.keys(formdata).length < 3) {
+      toast("Please fill at least 3 fields before continuing.");
+      return;
+    }
+    toast("Event has been created.");
+    setStep(step + 1);
+  };
+
+  const onCreatelink = (interviewId) => {
+    setInterviewId(interviewId);
+    setStep(step+1); 
+  };
 
   return (
     <div className="w-full mt-10 px-10 py-7 md:px-24 lg:px-44 xl:px-56 bg-white rounded-md">
@@ -34,10 +52,15 @@ function CreateInterview() {
       {step == 1 ? (
         <Form_container
           onhandleInputChange={onhandleInputChange}
-          gotoNext={() => setStep(step + 1)}
+          gotoNext={() => ongotoNext()}
         />
       ) : step == 2 ? (
-        <Questions_list />
+        <Questions_list
+          formdata={formdata}
+          onCreatelink={(interviewId) => onCreatelink(interviewId)}
+        />
+      ) : step == 3 ? (
+        <InterviewLink interviewId={InterviewId} formdata={formdata} />
       ) : null}
     </div>
   );

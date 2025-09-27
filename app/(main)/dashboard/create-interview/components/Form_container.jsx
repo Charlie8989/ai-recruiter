@@ -36,7 +36,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
           <p className="text-sm mb-3">Job Position</p>
           <input
             type="text"
-            placeholder="e.g. John Smith"
+            placeholder="e.g. Web Developer"
             className="p-4 bg-white w-full text-gray-500 rounded-md border border-black/40 outline-none"
             required
             onChange={(e) => {
