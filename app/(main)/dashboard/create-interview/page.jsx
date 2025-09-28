@@ -1,8 +1,8 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Loader } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Form_container from "./components/Form_container";
 import Questions_list from "./components/Questions_list";
 import { toast } from "sonner";
@@ -10,8 +10,9 @@ import InterviewLink from "./components/InterviewLink";
 
 function CreateInterview() {
   const router = useRouter();
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [InterviewId, setInterviewId] = useState();
+  const [usequestionlist, setuseQuestionList] = useState([]);
 
   const [formdata, setFormdata] = useState({});
 
@@ -33,7 +34,7 @@ function CreateInterview() {
 
   const onCreatelink = (interviewId) => {
     setInterviewId(interviewId);
-    setStep(step+1); 
+    setStep(step + 1);
   };
 
   return (
@@ -58,9 +59,15 @@ function CreateInterview() {
         <Questions_list
           formdata={formdata}
           onCreatelink={(interviewId) => onCreatelink(interviewId)}
+          setuseQuestionList={setuseQuestionList}
+          questionlist={usequestionlist}
         />
       ) : step == 3 ? (
-        <InterviewLink interviewId={InterviewId} formdata={formdata} />
+        <InterviewLink
+          usequestionlist={usequestionlist}
+          interviewId={InterviewId}
+          formdata={formdata}
+        />
       ) : null}
     </div>
   );

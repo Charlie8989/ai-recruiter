@@ -7,12 +7,13 @@ import QuestionListContainer from "./QuestionListContainer";
 import { supabase } from "@/services/supabaseClient";
 import { useUser } from "@/app/provider";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
-const Questions_list = ({ formdata,onCreatelink }) => {
+const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionlist }) => {
   const [loading, setLoading] = useState(false);
-  const [questionlist, setQuestionList] = useState();
   const [saveLoading, setsaveLoading] = useState(false);
   const { user } = useUser();
+  const router = useRouter();
 
   let interviewId = uuidv4();
 
@@ -35,7 +36,12 @@ const Questions_list = ({ formdata,onCreatelink }) => {
       .select();
 
     setsaveLoading(false);
-    // console.log(data);
+
+    if (!error) {
+      router.push(`/interview/${interviewId}`); // ✅ redirect
+    } else {
+      toast("Failed to save interview");
+    }
   };
 
   const generateQuestions = async () => {
@@ -43,29 +49,23 @@ const Questions_list = ({ formdata,onCreatelink }) => {
     try {
       const result = await axios.post("/api/ai-model/", { ...formdata });
 
-      // console.log("Raw AI Response:", result.data.content);
-
-      // Remove any ```json or ``` backticks from AI response
       const cleaned = result.data.content
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
 
-      // Parse once
       const parsed = JSON.parse(cleaned);
 
-      // Set question list
-      setQuestionList(parsed.interviewQuestions || []);
+      setuseQuestionList(parsed.interviewQuestions || []); // ✅ parent state
     } catch (err) {
       console.error("Error parsing AI response:", err);
       toast("Server or Parsing Error");
     } finally {
       setLoading(false);
     }
-    onCreatelink({interviewId})
+    onCreatelink({ interviewId });
   };
 
-  // console.log("questionlist formdata" , formdata)
   return (
     <div
       className={`p-5 rounded-xl border flex flex-col gap-5 ${
@@ -89,8 +89,9 @@ const Questions_list = ({ formdata,onCreatelink }) => {
         <div>
           <QuestionListContainer questionlist={questionlist} />
           <div className="flex justify-end mt5">
-            <Button onClick={() => onFinish()} disabled={saveLoading}>
-              {saveLoading && <Loader2Icon className="animate-spin" />}Create Interview & Finish
+            <Button onClick={onFinish} disabled={saveLoading}>
+              {saveLoading && <Loader2Icon className="animate-spin" />}
+              Create Interview & Finish
             </Button>
           </div>
         </div>
@@ -98,5 +99,6 @@ const Questions_list = ({ formdata,onCreatelink }) => {
     </div>
   );
 };
+
 
 export default Questions_list;
