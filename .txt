@@ -2,3 +2,7 @@ if u name a folder in brackes like (main) then it will not be considered as rout
 stopped at 1:55:56
 we r creating interview id using  a package called UUID
 stopped at 2:33:32
+to make dynamic folder we use [interviewID] as an array
+we use layout and component  for any foder to maintain structure 
+layout is like main file u have to add toaster provide and every tag here to use in childrens
+wasted 3-4 hours while setting up vapi AI and 1-2 hours due to my dumbness, did'nt turn on the mic and was testing :(

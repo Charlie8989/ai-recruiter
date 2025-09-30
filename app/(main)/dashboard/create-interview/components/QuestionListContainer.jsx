@@ -1,6 +1,7 @@
 import React from "react";
 
 const QuestionListContainer = ({questionlist}) => {
+  
   return (
     <div>
       <h2 className="font-bold text-2xl">Generated Questions</h2>

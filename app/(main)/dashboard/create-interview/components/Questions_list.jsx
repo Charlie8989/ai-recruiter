@@ -9,9 +9,15 @@ import { useUser } from "@/app/provider";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 
-const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionlist }) => {
+const Questions_list = ({
+  formdata,
+  onCreatelink,
+  setuseQuestionList,
+  questionlist,
+}) => {
   const [loading, setLoading] = useState(false);
   const [saveLoading, setsaveLoading] = useState(false);
+  const [localQuestions, setLocalQuestions] = useState([]);
   const { user } = useUser();
   const router = useRouter();
 
@@ -23,26 +29,28 @@ const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionli
     }
   }, [formdata]);
 
-  const onFinish = async () => {
-    setsaveLoading(true);
-    const { data, error } = await supabase
-      .from("interview")
-      .insert({
-        ...formdata,
-        questionList: questionlist,
-        userEmail: user?.email,
-        interviewID: interviewId,
-      })
-      .select();
+const onFinish = async () => {
+  setsaveLoading(true);
+  const { data, error } = await supabase
+    .from("interview")
+    .insert({
+      ...formdata,
+      questionList: questionlist,
+      userEmail: user?.email,
+      interviewID: interviewId,
+    })
+    .select();
 
-    setsaveLoading(false);
+  setsaveLoading(false);
 
-    if (!error) {
-      router.push(`/interview/${interviewId}`); // ✅ redirect
-    } else {
-      toast("Failed to save interview");
-    }
-  };
+  if (!error) {
+    onCreatelink({interviewId}); 
+    // router.push(`/interview/${interviewId}`);
+  } else {
+    toast("Failed to save interview");
+  }
+};
+
 
   const generateQuestions = async () => {
     setLoading(true);
@@ -55,15 +63,20 @@ const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionli
         .trim();
 
       const parsed = JSON.parse(cleaned);
+      const questions = parsed.interviewQuestions || [];
 
-      setuseQuestionList(parsed.interviewQuestions || []); // ✅ parent state
+      setuseQuestionList(questions);
+      setLocalQuestions(questions);
+
+      // console.log("Generated Questions:", questions);
+
+      // onCreatelink({ interviewId });
     } catch (err) {
       console.error("Error parsing AI response:", err);
       toast("Server or Parsing Error");
     } finally {
       setLoading(false);
     }
-    onCreatelink({ interviewId });
   };
 
   return (
@@ -72,6 +85,7 @@ const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionli
         loading ? "bg-blue-100" : "bg-white"
       }`}
     >
+      {/* Step 1: Show loading */}
       {loading && (
         <div className="flex items-center gap-3">
           <Loader2Icon className="animate-spin" />
@@ -85,13 +99,15 @@ const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionli
         </div>
       )}
 
-      {questionlist?.length > 0 && (
+      {/* Step 2: Show questions after loading is done */}
+      {!loading && localQuestions?.length > 0 && (
         <div>
-          <QuestionListContainer questionlist={questionlist} />
-          <div className="flex justify-end mt5">
+          <QuestionListContainer questionlist={localQuestions} />
+
+          <div className="flex justify-end mt-5">
             <Button onClick={onFinish} disabled={saveLoading}>
-              {saveLoading && <Loader2Icon className="animate-spin" />}
-              Create Interview & Finish
+              {saveLoading && <Loader2Icon className="animate-spin mr-2" />}
+              {saveLoading ? "Saving..." : "Create Interview & Finish"}
             </Button>
           </div>
         </div>
@@ -99,6 +115,5 @@ const Questions_list = ({ formdata, onCreatelink, setuseQuestionList, questionli
     </div>
   );
 };
-
 
 export default Questions_list;

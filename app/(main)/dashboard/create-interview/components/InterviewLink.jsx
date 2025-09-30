@@ -19,7 +19,7 @@ const InterviewLink = (props) => {
   // console.log(props.formdata.duration);
   // console.log(props.InterviewId);
   // console.log(props.usequestionlist.length);
-  // const URL = process.env.NEXT_PUBLIC_HOST_URL + "/" + props.interviewId.interviewId;
+  const URL = process.env.NEXT_PUBLIC_HOST_URL + "/" + props.interviewId.interviewId;
 
   const getInterviewLink = () => {
     // console.log(URL);
@@ -27,7 +27,7 @@ const InterviewLink = (props) => {
   };
 
   const onCopyLink=async ()=>{
-      // await navigator.clipboard.writeText(URL);
+      await navigator.clipboard.writeText(URL);
       toast("Link Copied");
   }
 
@@ -64,8 +64,8 @@ const InterviewLink = (props) => {
             <input
               className="border border-gray-200 w-[26em] p-2 font-medium underline
            text-black"
-              // defaultValue={getInterviewLink()}
-              defaultValue={"Debugging Now"}
+              defaultValue={getInterviewLink()}
+              // defaultValue={"Debugging Now"}
               disabled
             />
             <button onClick={()=>onCopyLink()} className="bg-[#2E318F] text-white p-2 flex justify-between items-center h-full">
@@ -76,7 +76,7 @@ const InterviewLink = (props) => {
 
           <div className="mt-6 flex gap-4">
             <span className="flex gap-1 items-center text-sm">
-              <Clock className="w-4" /> {props.formdata?.duration} 30 min
+              <Clock className="w-4" /> {props.formdata?.duration}
             </span>
             <span className="flex gap-1 items-center text-sm">
               <Ellipsis className="w-4" />{props.usequestionlist.length} questions
