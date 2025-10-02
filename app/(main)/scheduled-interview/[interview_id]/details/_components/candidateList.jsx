@@ -64,7 +64,7 @@ function CandidateList({ candidateList }) {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex gap-y-2 sm:gap-4 sm:flex-row flex-col items-center">
               <span className="px-2 py-1 border rounded-full text-green-600 font-semibold text-sm">
                 {getOverallRating(candidate)}/10
               </span>
@@ -76,7 +76,7 @@ function CandidateList({ candidateList }) {
                     createdAt: candidate.created_at,
                   },
                 }}
-                className="text-blue-600 text-sm font-medium hover:underline"
+                className="text-blue-600 sm:text-sm text-xs font-medium hover:underline "
               >
                 View Report
               </Link>

@@ -39,6 +39,8 @@ const ReportPage = () => {
     }
   };
 
+  // console.log(interviewDetail)
+
   const rating = candidateFeedback?.feedback?.feedback?.rating || {};
 
   const technical = Number(rating.technicalSkills) || 0;
@@ -47,8 +49,8 @@ const ReportPage = () => {
   const communication = Number(rating.communication) || 0;
 
   return (
-    <div className="bg-gray-100 p-10">
-      <div className="max-w-lg mx-auto bg-white rounded-xl shadow-lg p-6">
+    <div className="bg-gray-100 p-0 sm:p-10 flex justify-center items-center">
+      <div className="sm:w-lg w-[90vw] bg-white rounded-xl shadow-lg p-6">
         <div className="flex items-center space-x-3 mb-6">
           <img
             src={
@@ -60,7 +62,7 @@ const ReportPage = () => {
           />
           <div>
             <h2 className="text-xl font-semibold text-gray-800">
-              {candidateFeedback?.userName || "User"}
+              {user?.name || "User"}
             </h2>
             <p className="text-sm text-gray-600 capitalize">
               {interviewDetail?.jobPosition || "Job Position"}
@@ -73,8 +75,8 @@ const ReportPage = () => {
             Skills Assessment
           </h3>
           <div className="space-y-3 mt-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-700">
+            <div className="flex justify-between gap-3 items-center">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">
                 Technical Skills
               </span>
               <div className="w-2/3">
@@ -83,11 +85,11 @@ const ReportPage = () => {
                   className="h-2 bg-blue-400 rounded-full"
                 />
               </div>
-              <span className="text-sm text-gray-700">{technical}/10</span>
+              <span className="text-xs sm:text-sm text-gray-700">{technical}/10</span>
             </div>
 
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-700">
+            <div className="flex justify-between gap-3 items-center">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">
                 Problem Solving
               </span>
               <div className="w-2/3">
@@ -96,33 +98,33 @@ const ReportPage = () => {
                   className="h-2 bg-blue-400 rounded-full"
                 />
               </div>
-              <span className="text-sm text-gray-700">{problem}/10</span>
+              <span className="text-xs sm:text-sm text-gray-700">{problem}/10</span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">
                 Communication
               </span>
-              <div className="w-2/3">
+              <div className="w-[5rem] sm:w-2/3">
                 <Progress
                   value={communication * 10}
                   className="h-2 bg-blue-400 rounded-full"
                 />
               </div>
-              <span className="text-sm text-gray-700">{communication}/10</span>
+              <span className="text-xs sm:text-sm text-gray-700">{communication}/10</span>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">
                 Experience
               </span>
-              <div className="w-2/3">
+              <div className="w-[6rem] sm:w-2/3">
                 <Progress
                   value={experience * 10}
                   className="h-2 bg-blue-400 rounded-full"
                 />
               </div>
-              <span className="text-sm text-gray-700">{experience}/10</span>
+              <span className="text-xs sm:text-sm text-gray-700">{experience}/10</span>
             </div>
           </div>
         </div>
@@ -132,7 +134,7 @@ const ReportPage = () => {
             Performance Summary
           </h3>
           <p className="text-sm text-gray-600 mt-2">
-            {candidateFeedback?.feedback?.summary ||
+            {candidateFeedback?.feedback?.feedback?.summary ||
               "No summary available for this candidate."}
           </p>
         </div>
