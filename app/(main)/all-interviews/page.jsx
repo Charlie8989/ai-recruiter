@@ -2,12 +2,12 @@
 import { useUser } from "@/app/provider";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/services/supabaseClient";
-import { Camera, CopyIcon, Send, Video } from "lucide-react";
+import { Video } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import InterviewCard from "./InterviewCard";
+import InterviewCard from "../dashboard/_components/InterviewCard";
 
-const PreviousCreated = () => {
+const AllInterview = () => {
   const { user } = useUser();
   const [interviewList, setInterviewList] = useState();
 
@@ -20,18 +20,16 @@ const PreviousCreated = () => {
       .from("interview")
       .select("*")
       .eq("userEmail", user?.email)
-      .order("id", { ascending: false})
-      .limit(6)
-
+      .order("id", { ascending: false })
     setInterviewList(interview);
   };
-
   return (
     <div>
+    <h2 className="text-2xl font-bold">All Previously Created Interview</h2>
       {interviewList?.length == 0 && (
         <Link
           href="/dashboard/create-interview"
-          className="w-full h-40 gap-y-2 flex flex-col justify-center items-center bg-white border-1 border-black border-dashed rounded-md text-center"
+          className= "mt-5 w-full h-40 gap-y-2 flex flex-col justify-center items-center bg-white border-1 border-black border-dashed rounded-md text-center"
         >
           <div className="w-full flex justify-center">
             <Video />
@@ -41,9 +39,9 @@ const PreviousCreated = () => {
         </Link>
       )}
       {interviewList && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
+        <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
           {interviewList.map((interview, index) => (
-            <InterviewCard interview={interview} key={index} />
+            <InterviewCard interview={interview} key={index} viewDetail={false}/>
           ))}
         </div>
       )}
@@ -51,4 +49,4 @@ const PreviousCreated = () => {
   );
 };
 
-export default PreviousCreated;
+export default AllInterview;

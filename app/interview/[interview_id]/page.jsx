@@ -8,13 +8,14 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/services/supabaseClient";
 import { toast } from "sonner";
 import { InterviewDataContext } from "@/context/InterviewDataContext";
+import MicTestButton from "./_components/Microphone";
 
 const page = () => {
   const { interview_id } = useParams();
   const [interviewData, setInterviewData] = useState();
   const [userName, setuserName] = useState();
   const [loading, setLoading] = useState(false);
-  const { interviewInfo,setinterviewInfo } = useContext(InterviewDataContext);
+  const { interviewInfo, setinterviewInfo } = useContext(InterviewDataContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +27,7 @@ const page = () => {
     try {
       let { data: interview, error } = await supabase
         .from("interview")
-        .select("jobPosition,duration")
+        .select("jobPosition,duration,questionList")
         .eq("interviewID", interview_id);
 
       setInterviewData(interview[0]);
@@ -59,7 +60,7 @@ const page = () => {
       .eq("interviewID", interview_id)
       .select();
 
-    setinterviewInfo(interview[0] );
+    setinterviewInfo(interview[0]);
     router.push("/interview/" + interview_id + "/start");
     setLoading(false);
   };
@@ -94,12 +95,12 @@ const page = () => {
             </div>
             <div className="flex w-full flex-col justify-center items-center">
               <span className="text-xl sm:text-2xl my-3 font-semibold capitalize">
-                {interviewData?.jobPosition}
+                {interviewData?.jobPosition} Interview
               </span>
               <div className="flex gap-5 justify-center w-2/3 sm:w-1/2 px-3 mb-3">
                 <span className="flex text-sm items-center gap-2">
                   <List className="w-3 capitalize" />
-                  10 Questions
+                  {interviewData?.questionList.length} Questions
                 </span>
                 <span className="flex text-sm items-center gap-2 capitalize">
                   <Clock className="w-3" />
@@ -142,13 +143,8 @@ const page = () => {
             </div>
 
             <div className="flex mb-7 justify-between gap-x-5">
-              <Button
-                variant="Outline"
-                className="border rounded-md border-black/30"
-              >
-                <Settings className="w-4" />
-                Test Audio & Video
-              </Button>
+              <MicTestButton />
+
               <div
                 onClick={() => {
                   if (!userName) {

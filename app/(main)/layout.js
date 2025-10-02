@@ -9,7 +9,7 @@ export default function Layout({ children }) {
       <AppSidebar />
       <div className="w-full">
         <span>
-          {/* <SidebarTrigger /> */}
+          <SidebarTrigger />
         </span>
         <WelcomeContainer />
          <Toaster />
