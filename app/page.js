@@ -51,7 +51,7 @@ export default function Home() {
             </h1>
           </div>
           <Link href="/auth">
-            <Button>Sign Up</Button>
+            <Button className="bg-[#0A2540]">Sign Up</Button>
           </Link>
         </header>
 

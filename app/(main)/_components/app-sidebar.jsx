@@ -35,14 +35,10 @@ const items = [
     url: "/all-interviews",
     icon: List,
   },
-  {
-    title: "Billing",
-    url: "/billing",
-    icon: Wallet2Icon,
-  },
+ 
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ];

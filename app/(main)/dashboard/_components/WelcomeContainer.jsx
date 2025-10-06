@@ -23,7 +23,7 @@ const WelcomeContainer = () => {
       <div className="flex gap-4 items-center">
         <Bell className="w-5 h-5 cursor-pointer" />
         <img
-          src={user?.picture}
+          src={user?.picture||"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO3YkerCVdYtyi2McC6l-feLDSDl2KDOzFig&s"}
           className="cursor-pointer w-8 h-8 rounded-full"
           alt=""
         />
