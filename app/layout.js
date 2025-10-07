@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "BoloBoss",
   description: "AI Interview Scheduler",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -23,10 +26,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <SupabaseProvider>
-        {children}
-      </SupabaseProvider>
-        
+        <SupabaseProvider>{children}</SupabaseProvider>
       </body>
     </html>
   );
