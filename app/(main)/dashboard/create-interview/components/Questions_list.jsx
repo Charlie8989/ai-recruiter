@@ -57,7 +57,7 @@ const Questions_list = ({
     try {
       const result = await axios.post("/api/ai-model/", { ...formdata });
       const rawContent = result.data.content;
-      console.log("Raw AI response:", rawContent);
+      // console.log("Raw AI response:", rawContent);
 
       let cleaned = rawContent;
       if (typeof cleaned === "string") {
@@ -109,7 +109,7 @@ const Questions_list = ({
         <div>
           <QuestionListContainer questionlist={localQuestions} />
 
-          <div className="flex justify-end mt-5">
+          <div className="flex sm:justify-end justify-center mt-5">
             <Button onClick={onFinish} disabled={saveLoading}>
               {saveLoading && <Loader2Icon className="animate-spin mr-2" />}
               {saveLoading ? "Saving..." : "Create Interview & Finish"}

@@ -20,7 +20,7 @@ export async function POST(req){
         // console.log(completion.choices[0].message);
         return NextResponse.json(completion.choices[0].message);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         return NextResponse.json(e);
       }
 }   
