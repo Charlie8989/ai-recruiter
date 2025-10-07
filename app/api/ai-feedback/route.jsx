@@ -13,7 +13,7 @@ export async function POST(req){
         });
     
         const completion = await openai.chat.completions.create({
-          model: "x-ai/grok-4-fast:free",
+          model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
           messages: [{ role: "user", content: FINAL_PROMPT}],
         //   response_format:'json'
         });

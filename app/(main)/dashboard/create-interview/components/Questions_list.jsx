@@ -29,38 +29,43 @@ const Questions_list = ({
     }
   }, [formdata]);
 
-const onFinish = async () => {
-  setsaveLoading(true);
-  const { data, error } = await supabase
-    .from("interview")
-    .insert({
-      ...formdata,
-      questionList: questionlist,
-      userEmail: user?.email,
-      interviewID: interviewId,
-    })
-    .select();
+  const onFinish = async () => {
+    setsaveLoading(true);
+    const { data, error } = await supabase
+      .from("interview")
+      .insert({
+        ...formdata,
+        questionList: questionlist,
+        userEmail: user?.email,
+        interviewID: interviewId,
+      })
+      .select();
 
-  setsaveLoading(false);
+    setsaveLoading(false);
 
-  if (!error) {
-    onCreatelink({interviewId}); 
-    // router.push(`/interview/${interviewId}`);
-  } else {
-    toast("Failed to save interview");
-  }
-};
-
+    if (!error) {
+      onCreatelink({ interviewId });
+      // router.push(`/interview/${interviewId}`);
+    } else {
+      toast("Failed to save interview");
+    }
+  };
 
   const generateQuestions = async () => {
     setLoading(true);
+    
     try {
       const result = await axios.post("/api/ai-model/", { ...formdata });
+      const rawContent = result.data.content;
+      console.log("Raw AI response:", rawContent);
 
-      const cleaned = result.data.content
-        .replace(/```json/g, "")
-        .replace(/```/g, "")
-        .trim();
+      let cleaned = rawContent;
+      if (typeof cleaned === "string") {
+        cleaned = cleaned
+          .replace(/```json/g, "")
+          .replace(/```/g, "")
+          .trim();
+      }
 
       const parsed = JSON.parse(cleaned);
       const questions = parsed.interviewQuestions || [];
@@ -72,8 +77,8 @@ const onFinish = async () => {
 
       // onCreatelink({ interviewId });
     } catch (err) {
-      console.error("Error parsing AI response:", err);
-      toast("Server or Parsing Error");
+      console.error("Error parsing AI response:", err?.response?.data || err.message || err);
+      toast("Server Error, Come Back Later...");
     } finally {
       setLoading(false);
     }

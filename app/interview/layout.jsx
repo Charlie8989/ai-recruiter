@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import InterviewHeader from "./_components/InterviewHeader";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Toaster } from "sonner";
 import { InterviewDataProvider } from "@/context/InterviewDataContext";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 const InterviewLayout = ({ children }) => {
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());

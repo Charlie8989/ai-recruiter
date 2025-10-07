@@ -17,6 +17,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -35,7 +36,7 @@ const items = [
     url: "/all-interviews",
     icon: List,
   },
- 
+
   {
     title: "Settings",
     url: "/settings",
@@ -48,10 +49,14 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
+        <Link href={"/dashboard"}>
           <SidebarGroupLabel className="text-2xl text-black font-bold my-4">
             BOLOBOSS
           </SidebarGroupLabel>
-          <Button className="mb-4">+ Create New Interview</Button>
+          </Link>
+          <Link href={"/dashboard/create-interview"}>
+            <Button className="mb-4">+ Create New Interview</Button>
+          </Link>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

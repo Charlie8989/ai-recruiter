@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/services/supabaseClient";
 import { Progress } from "@/components/ui/progress";
 
-
 const page = () => {
   const [user, setUser] = useState(null);
   const [credits, setCredits] = useState();
@@ -38,16 +37,17 @@ const page = () => {
     router.push("/");
   };
 
-  const proceedtoBuy=()=>{
-    router.push('/settings/buy-credits')
-  }
+  const proceedtoBuy = () => {
+    router.push("/settings/buy-credits");
+  };
   return (
     <div>
-     <div className="w-full p-5">
+      <div className="w-full p-5">
         <div className="flex justify-evenly gap-4 items-center sm:flex-row flex-col">
           <div className="flex sm:flex-row flex-col gap-4 items-center">
             <img
-              src={user?.user_metadata?.avatar_url||
+              src={
+                user?.user_metadata?.avatar_url ||
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO3YkerCVdYtyi2McC6l-feLDSDl2KDOzFig&s"
               }
               className="cursor-pointer w-20 h-20 rounded-full"
@@ -69,21 +69,24 @@ const page = () => {
           </Button>
         </div>
         <div className="bg-white rounded-md w-[70vw] sm:w-[50vw] mx-auto sm:my-6 my-3">
-          <div className="p-5">
+          <div className="px-5 py-3">
             <p className="text-lg gap-x-2">
               Credits Left :
-              <span className="text-md ml-3 ">
-                {credits || "0"}/{credits || "0"}
-              </span>
+              <span className="text-md ml-3 ">{credits || "0"}</span>
             </p>
-            <Progress
-              className="sm:mt-3 mt-1"
-              value={((3 - credits) / 3) * 100}
-            />
+
+            {credits === 0 && (
+              <div className="text-red-500 font-semibold text-center text-sm w-full">
+                Oops! You’re out of credits
+              </div>
+            )}
           </div>
           <div onClick={proceedtoBuy} className="w-full text-center">
             <Button className={"w-1/2 mb-6"}>$ Buy Credits</Button>
           </div>
+        </div>
+        <div className="text-center">
+          <p className="font-semibold my-8">Thanks for using BOLOBOSS ❤️</p>
         </div>
       </div>
     </div>

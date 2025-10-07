@@ -72,7 +72,7 @@ const StartPage = () => {
     });
     // console.log(result?.data);
     const Content = result.data.content;
-    const FINAL_CONTENT = Content.replace("```json", "").replace("````", "");
+    const FINAL_CONTENT = Content?.replace("```json", "")?.replace("```", "");
     // console.log(FINAL_CONTENT);
     // console.log("I am from generate feedback");
 

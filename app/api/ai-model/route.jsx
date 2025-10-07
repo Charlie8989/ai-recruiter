@@ -10,7 +10,7 @@ export async function POST(req) {
     .replace("{{duration}}", duration)
     .replace("{{type}}", type);
 
-    // console.log(FINAL_PROMPT)
+  // console.log(FINAL_PROMPT)
 
   try {
     const openai = new OpenAI({
@@ -19,14 +19,19 @@ export async function POST(req) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "x-ai/grok-4-fast:free",
-      messages: [{ role: "user", content: FINAL_PROMPT}],
-    //   response_format:'json'
+      model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+      messages: [{ role: "user", content: FINAL_PROMPT }],
+      //   response_format:'json'
     });
     // console.log(completion.choices[0].message);
-    return NextResponse.json(completion.choices[0].message);
+    return NextResponse.json({
+      content: completion?.choices[0]?.message?.content,
+    });
   } catch (e) {
     console.log(e);
-    return NextResponse.json(e);
+    return NextResponse.json(
+      { error: e.message || "Something went wrong" },
+      { status: 500 }
+    );
   }
 }

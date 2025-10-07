@@ -2,6 +2,7 @@
 import { useUser } from "@/app/provider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Bell } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 const WelcomeContainer = () => {
@@ -22,11 +23,12 @@ const WelcomeContainer = () => {
       {/* Right Side (Notifications + Profile) */}
       <div className="flex gap-4 items-center">
         <Bell className="w-5 h-5 cursor-pointer" />
-        <img
+        <Link href={'/settings'}><img
           src={user?.picture||"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO3YkerCVdYtyi2McC6l-feLDSDl2KDOzFig&s"}
           className="cursor-pointer w-8 h-8 rounded-full"
           alt=""
-        />
+        /></Link>
+        
       </div>
     </div>
   );

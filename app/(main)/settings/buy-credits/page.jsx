@@ -102,29 +102,31 @@ export default function BuyCredits() {
     <>
       {/* Razorpay checkout script */}
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <div className="w-full bg-white p-5 rounded-md ">
-        <p className="text-lg font-semibold mb-3">Buy credits</p>
-        <Input
-          value={creditInput}
-          onChange={(e) => setCreditInput(e.target.value)}
-          placeholder={"Enter number of credits"}
-        />
+        <div className="w-[70vw] mx-auto sm:w-[50vw] bg-white p-5 rounded-md ">
+          <p className="text-lg font-bold mb-3">Buy credits</p>
+          <Input
+            value={creditInput}
+            onChange={(e) => setCreditInput(e.target.value)}
+            placeholder={"Enter number of credits"}
+          />
 
-        <Button onClick={BuyCredits} className="w-full mt-5" disabled={loading}>
-          {loading ? "Processing..." : "Buy Credits"}
-        </Button>
-      </div>
-      <div className="bg-white p-4 rounded-md mt-4 text-gray-700">
-        <h3 className="font-semibold mb-1">Quick Tips</h3>
-        <ul className="list-disc ml-5 marker:text-blue-700">
-          <li>Each mock interview costs 5 credits.</li>
-          <li>You can purchase credits anytime.</li>
-          <li>Credits do not expire.</li>
-        </ul>
-      </div>
-      <div className="text-center">
-        <p className="font-semibold my-8">Thanks for using BOLOBOSS ❤️</p>
-      </div>
+          <Button
+            onClick={BuyCredits}
+            className="w-full mt-5"
+            disabled={loading}
+          >
+            {loading ? "Processing..." : "Buy Credits"}
+          </Button>
+        </div>
+        <div className="bg-white mx-auto w-[70vw] sm:w-[50vw] p-4 rounded-md mt-4 text-gray-700">
+          <h3 className="font-semibold mb-1">Quick Tips</h3>
+          <ul className="list-disc ml-5 marker:text-blue-700">
+            <li>Each mock interview costs 5 credits.</li>
+            <li>You can purchase credits anytime.</li>
+            <li>Credits do not expire.</li>
+          </ul>
+        </div>
+        
     </>
   );
 }

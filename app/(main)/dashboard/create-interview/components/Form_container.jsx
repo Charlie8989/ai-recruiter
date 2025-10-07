@@ -85,7 +85,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
               className={`rounded-full gap-1 flex items-center border px-3 py-2 cursor-pointer transition
                 ${
                   active.includes("technical")
-                    ? "bg-blue-500 text-white border-blue-500"
+                    ? "bg-[#2E318F] text-white border-blue-500"
                     : "bg-white text-black border-black"
                 }
               `}
@@ -99,7 +99,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
               className={`rounded-full gap-1 flex items-center border px-3 py-2 cursor-pointer transition
                 ${
                   active.includes("behavioral")
-                    ? "bg-blue-500 text-white border-blue-500"
+                    ? "bg-[#2E318F] text-white border-blue-500"
                     : "bg-white text-black border-black"
                 }
               `}
@@ -113,7 +113,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
               className={`rounded-full gap-1 flex items-center border px-3 py-2 cursor-pointer transition
                 ${
                   active.includes("experience")
-                    ? "bg-blue-500 text-white border-blue-500"
+                    ? "bg-[#2E318F] text-white border-blue-500"
                     : "bg-white text-black border-black"
                 }
               `}
@@ -127,7 +127,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
               className={`rounded-full gap-1 flex items-center border px-3 py-2 cursor-pointer transition
                 ${
                   active.includes("solving")
-                    ? "bg-blue-500 text-white border-blue-500"
+                    ? "bg-[#2E318F] text-white border-blue-500"
                     : "bg-white text-black border-black"
                 }
               `}
@@ -141,7 +141,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
               className={`rounded-full gap-1 flex items-center border px-3 py-2 cursor-pointer transition
                 ${
                   active.includes("leadership")
-                    ? "bg-blue-500 text-white border-blue-500"
+                    ? "bg-[#2E318F] text-white border-blue-500"
                     : "bg-white text-black border-black"
                 }
               `}
