@@ -16,7 +16,7 @@ export const metadata = {
   title: "BoloBoss",
   description: "AI Interview Scheduler",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.png",
   },
 };
 
