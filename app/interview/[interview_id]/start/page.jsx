@@ -65,6 +65,10 @@ const StartPage = () => {
     }
   };
 
+  const muteMicrophone=()=>{
+    console.log("In Process")
+  }
+
   const GenerateFeedback = async () => {
     toast("Generating Response For Your Interview");
     const result = await axios.post("/api/ai-feedback", {
