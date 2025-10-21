@@ -1,8 +1,4 @@
-export type KeepAliveConfig = typeof keepAliveConfig
-
-
 export const keepAliveConfig = {
-
   // Select a table in your Supabase database to make a call to
   table: 'keep-alive',
 
@@ -19,5 +15,8 @@ export const keepAliveConfig = {
   otherEndpoints: [
     'https://your-other-vercel-project-urls.vercel.app/api/keep-alive',
     'https://your-other-supabase-app.com/api/keep-alive',
-  ]
-}
+  ],
+};
+
+// Removed the TS-only line:
+// export type KeepAliveConfig = typeof keepAliveConfig
