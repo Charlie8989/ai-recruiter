@@ -27,7 +27,7 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Scheduled Interview",
+    title: "Interview Feedbacks",
     url: "/scheduled-interview",
     icon: Calendar,
   },
