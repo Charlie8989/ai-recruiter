@@ -17,7 +17,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-[#697dff] to-[#E5D5C0]">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-white/10 background-texture">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-6">
         <img
           src="/login.svg"
@@ -38,7 +38,7 @@ const Login = () => {
           onClick={signinWithGoogle}
           className="w-full flex items-center justify-center gap-3 bg-white text-gray-900 border-2 border-gray-200 font-semibold py-6 rounded-lg shadow-sm hover:shadow-md hover:border-gray-300 hover:bg-transparent transition-all"
         >
-          <img src="/google.png" className="w-5 h-5" alt="Google logo" />
+          <img src="/google.webp" className="w-5 h-5" alt="Google logo" />
           Login with Google
         </Button>
       </div>

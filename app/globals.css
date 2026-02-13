@@ -148,3 +148,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.background-texture {
+  background-color: #f2f0f6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 10 10'%3E%3Cpath fill='%233434ea' fill-opacity='0.51' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}

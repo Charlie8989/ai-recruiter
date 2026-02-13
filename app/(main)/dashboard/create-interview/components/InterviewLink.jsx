@@ -65,6 +65,27 @@ const InterviewLink = (props) => {
     window.open(URL, "_blank");
   };
 
+  const onSend = () => {
+    const subject = encodeURIComponent("BOLOBOSS Interview Link");
+    const body = encodeURIComponent(
+      `Thanks for using BOLOBOSS!
+
+Here is your interview link:
+${URL}
+
+You can create more interviews anytime on our website.
+
+Best regards,
+Team BOLOBOSS`
+    );
+    const to = interview?.userEmail;
+
+    window.open(
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,
+      "_blank"
+    );
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex flex-col items-center p-6 sm:p-8 rounded-lg border border-gray-300 bg-white">
