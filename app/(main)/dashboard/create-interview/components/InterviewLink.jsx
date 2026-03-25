@@ -137,7 +137,7 @@ Team BOLOBOSS`
           </span>
           <span className="flex gap-2 items-center text-xs sm:text-sm">
             <Calendar className="w-4 h-4 flex-shrink-0" />
-            <span>Expires: Nov 20, 2025</span>
+            {/* <span>Expires: Nov 20, 2025</span> */}
           </span>
         </div>
       </div>

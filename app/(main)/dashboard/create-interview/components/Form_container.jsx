@@ -10,17 +10,17 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const Form_container = ({ onhandleInputChange,gotoNext }) => {
+const Form_container = ({ onhandleInputChange, gotoNext }) => {
   const [active, setActive] = useState([]);
   const [interviewtype, setInterviewType] = useState([]);
 
   //chatgpt ka hai
   const toggleType = (type, label) => {
     setActive((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     );
     setInterviewType((prev) =>
-      prev.includes(label) ? prev.filter((t) => t !== label) : [...prev, label]
+      prev.includes(label) ? prev.filter((t) => t !== label) : [...prev, label],
     );
   };
 
@@ -50,7 +50,12 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
           <p className="text-sm mb-3">Job Description</p>
           <textarea
             placeholder="Enter Detailed Job description..."
-            className="p-4 bg-white w-full text-gray-500 rounded-md border border-black/40 outline-none"
+            className="p-4 bg-white w-full text-gray-500 rounded-md border border-black/40 outline-none resize-none overflow-hidden"
+            rows={3}
+            onInput={(e) => {
+              e.target.style.height = "auto"; // reset
+              e.target.style.height = e.target.scrollHeight + "px"; // grow
+            }}
             onChange={(e) => {
               onhandleInputChange("jobDescription", e.target.value);
             }}
@@ -156,7 +161,7 @@ const Form_container = ({ onhandleInputChange,gotoNext }) => {
         <Button className="bg-transparent border border-black/30 text-black hover:bg-transparent">
           Cancel
         </Button>
-        <Button onClick={()=>gotoNext()}>Generate Questions ⟶</Button>
+        <Button onClick={() => gotoNext()}>Generate Questions ⟶</Button>
       </div>
     </div>
   );
