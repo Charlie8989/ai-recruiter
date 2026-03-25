@@ -6,8 +6,7 @@ export async function POST(req) {
   try {
     const { jobPosition, jobDescription, duration, type } = await req.json();
 
-    const FINAL_PROMPT = QUESTION_PROMPT
-      .replace("{{jobTitle}}", jobPosition)
+    const FINAL_PROMPT = QUESTION_PROMPT.replace("{{jobTitle}}", jobPosition)
       .replace("{{jobDescription}}", jobDescription)
       .replace("{{duration}}", duration)
       .replace("{{type}}", type);
@@ -25,17 +24,15 @@ export async function POST(req) {
 
     try {
       completion = await openai.chat.completions.create({
-        model: "openrouter/free",
+        model: "qwen/qwen3-coder:free",
         messages: [{ role: "user", content: FINAL_PROMPT }],
         timeout: 10000,
       });
-    } catch (err) {
-      console.error("OpenRouter error:", err?.response?.data || err.message);
-
-      return NextResponse.json(
-        { error: "AI service failed. Try again later." },
-        { status: 500 }
-      );
+    } catch {
+      completion = await openai.chat.completions.create({
+        model: "openrouter/free", 
+        messages: [{ role: "user", content: FINAL_PROMPT }],
+      });
     }
 
     const content = completion?.choices?.[0]?.message?.content;
@@ -45,16 +42,15 @@ export async function POST(req) {
     } else {
       return NextResponse.json(
         { error: "Empty response from AI" },
-        { status: 500 }
+        { status: 500 },
       );
     }
-
   } catch (err) {
     console.error("Server error:", err);
 
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
