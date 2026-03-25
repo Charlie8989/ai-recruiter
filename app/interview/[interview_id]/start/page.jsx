@@ -1,9 +1,8 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { InterviewDataContext } from "@/context/InterviewDataContext";
-import { Clock10Icon, Loader2, Loader2Icon, MicOff, Phone } from "lucide-react";
+import { Clock10Icon, Loader2Icon, MicOff, Phone } from "lucide-react";
 import { useUser } from "@/app/provider";
 import Vapi from "@vapi-ai/web";
 import { toast } from "sonner";
@@ -11,95 +10,131 @@ import Stopwatch from "./_components/Stopwatch";
 import axios from "axios";
 import { supabase } from "@/services/supabaseClient";
 
-const startCall = async (interviewInfo, vapi) => {
-  let questionList = "";
-  interviewInfo?.questionList?.forEach(
-    (item) => (questionList = (item?.question || "") + "," + questionList)
-  );
-
-  vapi.start("89d78948-79e7-4b5c-8913-eb2ce4ce8c0c", {
-    variableValues: {
-      userName: interviewInfo?.name || "User",
-      jobPosition: interviewInfo?.jobPosition || "the position",
-      questionList: questionList,
-      length: interviewInfo?.questionList.length || "5-7",
-    },
-  });
-
-  // console.log(interviewInfo?.questionList.length)
-};
-const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY);
-
 const StartPage = () => {
   const { user } = useUser();
   const { interview_id } = useParams();
   const { interviewInfo } = useContext(InterviewDataContext);
+
   const [userActive, setuserActive] = useState(false);
   const [conversation, setConversation] = useState();
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
+  const vapiRef = useRef(null);
+  const hasStarted = useRef(false);
 
   useEffect(() => {
-    if (interviewInfo) {
-      startCall(interviewInfo, vapi);
-    }
-  }, [interviewInfo, vapi]);
+    const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY);
+    vapiRef.current = vapi;
 
-  vapi.on("call-start", () => toast("Meeting Joined Successfully"));
+    vapi.on("call-start", () => {
+      toast("Meeting Joined Successfully");
+    });
 
-  vapi.on("speech-start", () => {
-    setuserActive(false);
-  });
-  vapi.on("speech-end", () => {
-    setuserActive(true);
-  });
-  // vapi.on("call-end", () => {
-  //   toast("Meet Ended");
-  //   GenerateFeedback();
-  // });
+    vapi.on("speech-start", () => {
+      setuserActive(false);
+    });
 
-  window.onload = () => {
-    if (performance.getEntriesByType("navigation")[0].type === "reload") {
+    vapi.on("speech-end", () => {
+      setuserActive(true);
+    });
+
+    vapi.on("error", (e) => {
+      // console.log("Vapi error:", e);
+      toast("Something went wrong with call");
+    });
+
+    vapi.on("call-end", () => {
+      toast("Meeting Ended");
+    });
+
+    return () => {
       vapi.stop();
-      toast("Meet Ended");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!interviewInfo || !vapiRef.current || hasStarted.current) return;
+    hasStarted.current = true;
+    startCall(interviewInfo, vapiRef.current);
+  }, [interviewInfo]);
+
+  const startCall = async (interviewInfo, vapi) => {
+    let questionList = "";
+
+    interviewInfo?.questionList?.forEach((item) => {
+      questionList += (item?.question || "") + ",";
+    });
+
+    try {
+      await vapi.start("4ab170a7-a305-45e2-b6b0-17aa386b2798", {
+        variableValues: {
+          userName: interviewInfo?.name || "User",
+          jobPosition: interviewInfo?.jobPosition || "the position",
+          questionList,
+          length: interviewInfo?.questionList.length || "5-7",
+        },
+      });
+    } catch (err) {
+      // console.log("Start failed:", err);
     }
   };
 
-  const muteMicrophone=()=>{
-    console.log("In Process")
-  }
+  const endInterview = () => {
+    vapiRef.current?.stop();
+    GenerateFeedback();
+    setLoading(true);
+  };
 
   const GenerateFeedback = async () => {
-    toast("Generating Response For Your Interview");
-    const result = await axios.post("/api/ai-feedback", {
-      conversation: conversation,
-    });
-    // console.log(result?.data);
-    const Content = result.data.content;
-    const FINAL_CONTENT = Content?.replace("```json", "")?.replace("```", "");
-    // console.log(FINAL_CONTENT);
-    // console.log("I am from generate feedback");
+    try {
+      if (!conversation || conversation.length === 0) {
+        toast("No conversation to analyze");
+        setTimeout(() => {
+          router.replace("/dashboard");
+        }, 1500);
+        return;
+      }
 
-    const { data, error } = await supabase
-      .from("feedback")
-      .insert([
+      toast("Generating Response For Your Interview");
+
+      const result = await axios.post("/api/ai-feedback", {
+        conversation,
+      });
+
+      const content = result?.data?.content;
+
+      if (!content) throw new Error("Empty AI response");
+
+      const cleaned = content.replace(/```json|```/g, "").trim();
+
+      let parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch {
+        parsed = { raw: cleaned };
+      }
+
+      const { error } = await supabase.from("feedback").insert([
         {
           userName: interviewInfo?.userName,
           userEmail: interviewInfo?.userEmail,
           interviewID: interview_id,
-          feedback: JSON.parse(FINAL_CONTENT),
+          feedback: parsed,
           recommended: false,
         },
-      ])
-      .select();
-    // console.log(data);
-    router.replace("/interview/" + interview_id + "/completed");
-  };
+      ]);
 
-  const endInterview = () => {
-    vapi.stop();
-    GenerateFeedback();
-    setLoading(true);
+      if (error) throw error;
+
+      router.replace("/interview/" + interview_id + "/completed");
+    } catch (err) {
+      // console.log("Feedback error:", err);
+      toast("Failed to generate feedback");
+    }
+  };
+  const muteMicrophone = () => {
+    // console.log("Mute logic here");
   };
 
   return (
@@ -122,7 +157,7 @@ const StartPage = () => {
                 className={`absolute w-20 h-20 rounded-full bg-white border border-white ${
                   !userActive ? "animate-ping" : ""
                 }`}
-              ></span>
+              />
               <img
                 src="https://imagedelivery.net/xE-VtsYZUS2Y8MtLMcbXAg/4a05b139a21e91fdb87f/sm"
                 className="w-20 h-20 rounded-full relative"
@@ -132,13 +167,13 @@ const StartPage = () => {
             <span className="text-gray-400">AI Recruiter</span>
           </div>
 
-          <div className="sm:w-1/2 w-full sm:h-full h-1/2 bg-black rounded-md border flex-col gap-y-2 border-white flex items-center justify-center">
+          <div className="sm:w-1/2 w-full sm:h-full h-1/2 bg-black rounded-md border border-white flex flex-col gap-y-2 items-center justify-center">
             <span className="relative flex items-center justify-center">
               <span
                 className={`absolute w-20 h-20 rounded-full bg-white border border-white ${
                   userActive ? "animate-ping" : ""
                 }`}
-              ></span>
+              />
               <img
                 src={
                   user?.picture ||
@@ -156,12 +191,12 @@ const StartPage = () => {
 
         <div className="flex justify-center gap-6 mt-auto flex-wrap">
           <button
-            onClick={() => muteMicrophone()}
+            onClick={muteMicrophone}
             className="border cursor-pointer border-white/30 px-6 sm:px-10 py-3 sm:py-4 rounded-full flex items-center justify-center"
           >
             <MicOff className="w-6 h-6 sm:w-7 sm:h-7" />
           </button>
-          {/* <AlertConfirmation generateFeedback={() => GenerateFeedback()}> */}
+
           <div className="inline-block">
             <button
               onClick={endInterview}
@@ -170,11 +205,10 @@ const StartPage = () => {
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              {loading && <Loader2Icon className="w-4 animate-spin" />}{" "}
+              {loading && <Loader2Icon className="w-4 animate-spin" />}
               <Phone className="w-6 h-6 sm:w-7 sm:h-7" />
             </button>
           </div>
-          {/* </AlertConfirmation> */}
         </div>
       </div>
     </div>
