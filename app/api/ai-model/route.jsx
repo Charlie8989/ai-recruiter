@@ -3,51 +3,57 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(req) {
-  const { jobPosition, jobDescription, duration, type } = await req.json();
+  try {
+    const { jobPosition, jobDescription, duration, type } = await req.json();
 
-  const FINAL_PROMPT = QUESTION_PROMPT
-    .replace("{{jobTitle}}", jobPosition)
-    .replace("{{jobDescription}}", jobDescription)
-    .replace("{{duration}}", duration)
-    .replace("{{type}}", type);
+    const FINAL_PROMPT = QUESTION_PROMPT
+      .replace("{{jobTitle}}", jobPosition)
+      .replace("{{jobDescription}}", jobDescription)
+      .replace("{{duration}}", duration)
+      .replace("{{type}}", type);
 
-  const MODELS = [
-    "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-    "qwen/qwen3-coder:free",
-    // "deepseek/deepseek-chat-v3.1:free",
-    "google/gemma-3n-e2b-it:free",
-  ];
+    const openai = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPENROUTER_API_KEY,
+      defaultHeaders: {
+        "HTTP-Referer": "http://localhost:3000",
+        "X-Title": "AI Interview App",
+      },
+    });
 
-  const openai = new OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY,
-  });
+    let completion = null;
 
-  let completion = null;
-  let errorMessage = "";
-
-  for (const model of MODELS) {
     try {
       completion = await openai.chat.completions.create({
-        model,
+        model: "openrouter/free",
         messages: [{ role: "user", content: FINAL_PROMPT }],
+        timeout: 10000,
       });
-
-      if (completion?.choices?.[0]?.message?.content) {
-        break;
-      }
     } catch (err) {
-      errorMessage = err.message;
-    }
-  }
+      console.error("OpenRouter error:", err?.response?.data || err.message);
 
-  if (completion?.choices?.[0]?.message?.content) {
-    return NextResponse.json({
-      content: completion.choices[0].message.content,
-    });
-  } else {
+      return NextResponse.json(
+        { error: "AI service failed. Try again later." },
+        { status: 500 }
+      );
+    }
+
+    const content = completion?.choices?.[0]?.message?.content;
+
+    if (content && content.trim().length > 0) {
+      return NextResponse.json({ content });
+    } else {
+      return NextResponse.json(
+        { error: "Empty response from AI" },
+        { status: 500 }
+      );
+    }
+
+  } catch (err) {
+    console.error("Server error:", err);
+
     return NextResponse.json(
-      { error: `All models failed. Last error: ${errorMessage}` },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
