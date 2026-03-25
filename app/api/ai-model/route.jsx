@@ -14,7 +14,7 @@ export async function POST(req) {
   const MODELS = [
     "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
     "qwen/qwen3-coder:free",
-    "deepseek/deepseek-chat-v3.1:free",
+    // "deepseek/deepseek-chat-v3.1:free",
     "google/gemma-3n-e2b-it:free",
   ];
 
