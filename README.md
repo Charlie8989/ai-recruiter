@@ -1,36 +1,161 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎤 AI Mock Interviewer
 
-## Getting Started
+A SaaS-based AI mock interviewer that simulates real interview experiences through real-time voice conversations. Built with Next.js, VAPI, and OpenRouter, the platform provides AI-generated feedback, credit-based access, and secure payments using Razorpay.
 
-First, run the development server:
+## ✨ Features
+
+### 🤖 AI Interviews
+- Real-time voice conversations powered by VAPI.
+- AI-generated interview questions based on selected roles.
+- OpenRouter integration for LLM-powered responses.
+- Natural, interactive interview experience.
+
+### 📊 Performance Feedback
+- Detailed AI evaluation after every interview.
+- Scores based on communication, technical knowledge, confidence, and problem-solving.
+- Personalized strengths and improvement suggestions.
+- Structured interview summary.
+
+### 💳 Credit-Based System
+- Free interview credits for new users.
+- Purchase additional credits using Razorpay.
+- Secure payment integration.
+- Usage tracking for every interview session.
+
+### 🔐 Authentication
+- Secure user authentication.
+- Protected dashboard and interview history.
+- User profile management.
+
+### 📱 Modern UI
+- Responsive design for desktop and mobile.
+- Fast performance with Next.js.
+- Clean and intuitive user experience.
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- Next.js
+- React
+- JavaScript
+- Tailwind CSS
+- Shadcn UI
+
+### Backend
+- Node.js
+- Next.js API Routes
+
+### AI & Voice
+- VAPI
+- OpenRouter
+
+### Database & Authentication
+- Supabase
+
+### Payments
+- Razorpay
+
+### Deployment
+- Vercel
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js
+- Supabase Project
+- VAPI API Key
+- OpenRouter API Key
+- Razorpay Account
+
+### Installation
+
+```bash
+git clone https://github.com/your-username/ai-mock-interviewer.git
+
+cd ai-mock-interviewer
+
+npm install
+```
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+OPENROUTER_API_KEY=
+VAPI_API_KEY=
+
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📂 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+components/
+lib/
+hooks/
+public/
+utils/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎯 Key Highlights
 
-## Deploy on Vercel
+- Real-time AI voice interviews
+- LLM-powered conversations
+- AI-generated interview feedback
+- Credit-based SaaS model
+- Razorpay payment integration
+- Secure authentication
+- Responsive modern UI
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📌 Future Improvements
+
+- Resume-based interview generation
+- Multiple interview difficulty levels
+- Company-specific interview rounds
+- Coding interview support
+- Mock HR and behavioral interviews
+- Analytics dashboard
+- Leaderboards and achievements
+
+---
+
+## 👨‍💻 Author
+
+**Ayush Sahu**
+
+- GitHub: https://github.com/Charlie8989
+- Portfolio: https://portfolio.ayush-codes.tech
+- LinkedIn: https://www.linkedin.com/in/ayush-sahu-83r
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
