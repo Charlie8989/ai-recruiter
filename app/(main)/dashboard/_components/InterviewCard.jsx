@@ -45,6 +45,7 @@ Team BOLOBOSS`
         <span className="sm:text-xs text-sm">
           {moment(interview?.created_at).format("DD MMM yyy")}
         </span>
+        
       </div>
       <hr className="my-2 " />
       <div className="text-md sm:text-lg font-semibold capitalize">
