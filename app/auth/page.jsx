@@ -3,11 +3,20 @@
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth/client";
 import { Loader2Icon } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending && session?.user) {
+      router.replace("/dashboard");
+    }
+  }, [isPending, router, session?.user]);
 
   const signinWithGoogle = async () => {
     setLoading(true);
@@ -28,6 +37,15 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  if (isPending || session?.user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center gap-3 px-4 background-texture text-[#2E318F]">
+        <Loader2Icon className="h-6 w-6 animate-spin" />
+        Redirecting to dashboard
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 background-texture">
