@@ -1,74 +1,66 @@
 "use client";
 import UserDetailedContext from "@/context/UserDetailedContext";
-import { supabase } from "@/services/supabaseClient";
-import React, { useContext, useEffect, useState } from "react";
+import { authClient } from "@/lib/auth/client";
+import { NeonAuthUIProvider } from "@neondatabase/auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
-const SupabaseProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  const CreateNewUser = useCallback(async () => {
+    const authUser = session?.user;
+
+    if (!authUser) {
+      setUser(null);
+      return;
+    }
+
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: authUser.name || authUser.email?.split("@")[0],
+        email: authUser.email,
+        picture: authUser.image || null,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("User sync error:", await response.text());
+      return;
+    }
+
+    const data = await response.json();
+    setUser(data.user);
+  }, [session?.user]);
 
   useEffect(() => {
-    CreateNewUser();
-  }, []);
-
-  const CreateNewUser = async () => {
-    const {
-      data: { user: authUser },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !authUser) {
-      console.error("Auth error:", authError);
-      return;
+    if (!isPending) {
+      CreateNewUser();
     }
-
-    const { data: Users, error: selectError } = await supabase
-      .from("Users")
-      .select("*")
-      .eq("email", authUser.email);
-
-    if (selectError) {
-      console.error("Select error:", selectError);
-      return;
-    }
-
-    if (!Users || Users.length === 0) {
-      const { data, error: insertError } = await supabase
-        .from("Users")
-        .insert([
-          {
-            name:
-              authUser.user_metadata?.full_name ||
-              authUser.user_metadata?.name ||
-              authUser.email?.split("@")[0], // fallback for email logins
-            email: authUser.email,
-            picture:
-              authUser.user_metadata?.avatar_url ||
-              authUser.user_metadata?.picture ||
-              null,
-          },
-        ])
-        .select()
-        .single();
-
-      if (insertError) {
-        console.error("Insert error:", insertError);
-        return;
-      }
-
-      setUser(data);
-    } else {
-      setUser(Users[0]);
-    }
-  };
+  }, [CreateNewUser, isPending]);
 
   return (
-    <UserDetailedContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserDetailedContext.Provider>
+    <NeonAuthUIProvider
+      authClient={authClient}
+      navigate={router.push}
+      Link={Link}
+      redirectTo="/dashboard"
+      social={{ providers: ["google"] }}
+      credentials={{ forgotPassword: true }}
+    >
+      <UserDetailedContext.Provider value={{ user, setUser }}>
+        {children}
+      </UserDetailedContext.Provider>
+    </NeonAuthUIProvider>
   );
 };
 
-export default SupabaseProvider;
+export default AuthProvider;
 
 export const useUser = () => {
   const context = useContext(UserDetailedContext);

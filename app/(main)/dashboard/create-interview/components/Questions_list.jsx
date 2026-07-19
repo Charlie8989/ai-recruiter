@@ -4,7 +4,6 @@ import { Loader2Icon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import QuestionListContainer from "./QuestionListContainer";
-import { supabase } from "@/services/supabaseClient";
 import { useUser } from "@/app/provider";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
@@ -31,19 +30,20 @@ const Questions_list = ({
 
   const onFinish = async () => {
     setsaveLoading(true);
-    const { data, error } = await supabase
-      .from("interview")
-      .insert({
+    const response = await fetch("/api/interviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         ...formdata,
         questionList: questionlist,
         userEmail: user?.email,
         interviewID: interviewId,
-      })
-      .select();
+      }),
+    });
 
     setsaveLoading(false);
 
-    if (!error) {
+    if (response.ok) {
       onCreatelink({ interviewId });
       // router.push(`/interview/${interviewId}`);
     } else {

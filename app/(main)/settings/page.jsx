@@ -1,39 +1,17 @@
 "use client";
+import { useUser } from "@/app/provider";
+import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/services/supabaseClient";
-import { Progress } from "@/components/ui/progress";
 
 const page = () => {
-  const [user, setUser] = useState(null);
-  const [credits, setCredits] = useState();
+  const { user } = useUser();
+  const credits = user?.credits;
   const router = useRouter();
-  // console.log(user?.user_metadata)
-
-  useEffect(() => {
-    const fetchUserAndCredits = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-
-      if (user) {
-        const { data: Users, error } = await supabase
-          .from("Users")
-          .select("credits")
-          .eq("email", user.user_metadata?.email);
-        if (error) console.error(error);
-        else setCredits(Users[0].credits);
-      }
-    };
-
-    fetchUserAndCredits();
-  }, []);
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) return console.error(error);
+    await authClient.signOut();
     router.push("/");
   };
 
@@ -47,7 +25,7 @@ const page = () => {
           <div className="flex sm:flex-row flex-col gap-4 items-center">
             <img
               src={
-                user?.user_metadata?.avatar_url ||
+                user?.picture ||
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO3YkerCVdYtyi2McC6l-feLDSDl2KDOzFig&s"
               }
               className="cursor-pointer w-20 h-20 rounded-full"
@@ -55,10 +33,8 @@ const page = () => {
               referrerPolicy="no-referrer"
             />
             <div>
-              <p className="text-2xl font-bold ">
-                {user?.user_metadata?.full_name || "Name"}
-              </p>
-              <p>{user?.user_metadata?.email || "Email"}</p>
+              <p className="text-2xl font-bold ">{user?.name || "Name"}</p>
+              <p>{user?.email || "Email"}</p>
             </div>
           </div>
           <Button

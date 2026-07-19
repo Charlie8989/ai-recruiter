@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import { supabase } from "@/services/supabaseClient";
 import { toast } from "sonner";
 import { InterviewDataContext } from "@/context/InterviewDataContext";
 import MicTestButton from "./_components/Microphone";
@@ -25,10 +24,9 @@ const page = () => {
   const getInterviewDetails = async () => {
     setLoading(true);
     try {
-      let { data: interview, error } = await supabase
-        .from("interview")
-        .select("jobPosition,duration,questionList")
-        .eq("interviewID", interview_id);
+      const response = await fetch(`/api/interviews/${interview_id}`);
+      const data = await response.json();
+      const interview = data.interview ? [data.interview] : [];
 
       setInterviewData(interview[0]);
 
@@ -54,13 +52,14 @@ const page = () => {
 
   const adduserNametoDB = async () => {
     setLoading(true);
-    const { data: interview, error } = await supabase
-      .from("interview")
-      .update({ name: userName })
-      .eq("interviewID", interview_id)
-      .select();
+    const response = await fetch(`/api/interviews/${interview_id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: userName }),
+    });
+    const data = await response.json();
 
-    setinterviewInfo(interview[0]);
+    setinterviewInfo(data.interview);
     router.push("/interview/" + interview_id + "/start");
     setLoading(false);
   };

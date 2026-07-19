@@ -8,7 +8,6 @@ import Vapi from "@vapi-ai/web";
 import { toast } from "sonner";
 import Stopwatch from "./_components/Stopwatch";
 import axios from "axios";
-import { supabase } from "@/services/supabaseClient";
 
 const StartPage = () => {
   const { user } = useUser();
@@ -115,17 +114,19 @@ const StartPage = () => {
         parsed = { raw: cleaned };
       }
 
-      const { error } = await supabase.from("feedback").insert([
-        {
-          userName: interviewInfo?.userName,
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userName: interviewInfo?.name,
           userEmail: interviewInfo?.userEmail,
           interviewID: interview_id,
           feedback: parsed,
           recommended: false,
-        },
-      ]);
+        }),
+      });
 
-      if (error) throw error;
+      if (!response.ok) throw new Error(await response.text());
 
       router.replace("/interview/" + interview_id + "/completed");
     } catch (err) {

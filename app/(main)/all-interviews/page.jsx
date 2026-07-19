@@ -1,7 +1,6 @@
 "use client";
 import { useUser } from "@/app/provider";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/services/supabaseClient";
 import { Video } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -16,12 +15,11 @@ const AllInterview = () => {
   }, [user]);
 
   const GetInterviewList = async () => {
-    let { data: interview, error } = await supabase
-      .from("interview")
-      .select("*")
-      .eq("userEmail", user?.email)
-      .order("id", { ascending: false })
-    setInterviewList(interview);
+    const response = await fetch(
+      `/api/interviews?email=${encodeURIComponent(user?.email)}`
+    );
+    const data = await response.json();
+    setInterviewList(data.interviews || []);
   };
   return (
     <div>

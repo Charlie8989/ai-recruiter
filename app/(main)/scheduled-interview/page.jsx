@@ -1,6 +1,5 @@
 "use client";
 import { useUser } from "@/app/provider";
-import { supabase } from "@/services/supabaseClient";
 import React, { useEffect, useState } from "react";
 import InterviewCard from "../dashboard/_components/InterviewCard";
 import { Button } from "@/components/ui/button";
@@ -16,14 +15,13 @@ function ScheduledInterview() {
   }, [user]);
 
   const getInterviewList = async () => {
-    const result = await supabase
-      .from("interview")
-      .select("jobPosition,duration,interviewID,feedback(userEmail)")
-      .eq("userEmail", user?.email)
-      .order("id", { ascending: false });
-
-    // console.log(result);
-    setInterviewList(result.data);
+    const response = await fetch(
+      `/api/interviews?email=${encodeURIComponent(
+        user?.email
+      )}&includeFeedback=true`
+    );
+    const data = await response.json();
+    setInterviewList(data.interviews || []);
   };
 
   return (

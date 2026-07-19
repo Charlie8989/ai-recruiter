@@ -1,8 +1,7 @@
 "use client";
 import { useUser } from "@/app/provider";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/services/supabaseClient";
-import { Camera, CopyIcon, Send, Video } from "lucide-react";
+import { Video } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import InterviewCard from "./InterviewCard";
@@ -16,14 +15,11 @@ const PreviousCreated = () => {
   }, [user]);
 
   const GetInterviewList = async () => {
-    let { data: interview, error } = await supabase
-      .from("interview")
-      .select("*")
-      .eq("userEmail", user?.email)
-      .order("id", { ascending: false})
-      .limit(6)
-
-    setInterviewList(interview);
+    const response = await fetch(
+      `/api/interviews?email=${encodeURIComponent(user?.email)}&limit=6`
+    );
+    const data = await response.json();
+    setInterviewList(data.interviews || []);
   };
 
   return (

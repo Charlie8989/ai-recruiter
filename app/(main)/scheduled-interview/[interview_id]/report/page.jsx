@@ -1,6 +1,5 @@
 "use client";
 import { useUser } from "@/app/provider";
-import { supabase } from "@/services/supabaseClient";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
@@ -19,15 +18,13 @@ const ReportPage = () => {
   }, [user]);
 
   const GetInterviewDetail = async () => {
-    const result = await supabase
-      .from("interview")
-      .select(
-        "jobPosition,duration,jobDescription,type,questionList,interviewID,created_at,feedback(userEmail,userName,feedback,created_at)"
-      )
-      .eq("userEmail", user?.email)
-      .eq("interviewID", interview_id);
-
-    const detail = result?.data?.[0];
+    const response = await fetch(
+      `/api/interviews/${interview_id}?email=${encodeURIComponent(
+        user?.email
+      )}&includeFeedback=true`
+    );
+    const data = await response.json();
+    const detail = data.interview;
     setinterviewDetail(detail);
 
     // Find the feedback for the selected candidate and created_at

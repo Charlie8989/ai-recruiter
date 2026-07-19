@@ -1,5 +1,4 @@
 "use client";
-import { supabase } from "@/services/supabaseClient";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -13,11 +12,9 @@ function InterviewCompleted() {
   }, []);
 
   const GetFeedback = async () => {
-    let { data: feedback, error } = await supabase
-      .from("feedback")
-      .select("feedback")
-      .eq("interviewID", interview_id);
-    setFeedback(feedback[0]?.feedback?.feedback?.summary);
+    const response = await fetch(`/api/feedback?interviewID=${interview_id}`);
+    const data = await response.json();
+    setFeedback(data.feedback?.[0]?.feedback?.feedback?.summary);
     // console.log(feedback[0]?.feedback?.feedback?.summary);
   };
 

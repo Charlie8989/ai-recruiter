@@ -7,7 +7,6 @@ import Form_container from "./components/Form_container";
 import Questions_list from "./components/Questions_list";
 import { toast } from "sonner";
 import InterviewLink from "./components/InterviewLink";
-import { supabase } from "@/services/supabaseClient";
 import { useUser } from "@/app/provider";
 
 function CreateInterview() {
@@ -29,13 +28,11 @@ function CreateInterview() {
   }, [user]);
 
   const getuserDetails = async () => {
-    const { data: Users, error } = await supabase
-      .from("Users")
-      .select("credits")
-      .eq("email", user?.email)
-      .single();
-    if (error) console.error(error);
-    else setCredits(Users?.credits);
+    const response = await fetch(
+      `/api/users?email=${encodeURIComponent(user?.email)}`
+    );
+    const data = await response.json();
+    setCredits(data.user?.credits);
   };
 
   const ongotoNext = () => {

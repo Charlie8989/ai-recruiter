@@ -1,7 +1,6 @@
 "use client";
 import { useUser } from "@/app/provider";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/services/supabaseClient";
 import {
   ArrowLeft,
   Calendar,
@@ -33,13 +32,11 @@ const InterviewLink = (props) => {
   }, [user]);
 
   const getuserDetails = async () => {
-    const { data: Users, error } = await supabase
-      .from("Users")
-      .select("credits")
-      .eq("email", user?.email)
-      .single();
-    if (error) console.error(error);
-    else setCredits(Users?.credits);
+    const response = await fetch(
+      `/api/users?email=${encodeURIComponent(user?.email)}`
+    );
+    const data = await response.json();
+    setCredits(data.user?.credits);
   };
 
   useEffect(() => {
@@ -49,11 +46,11 @@ const InterviewLink = (props) => {
   }, [usercredits]);
 
   const updateCredits = async () => {
-    const { data, error } = await supabase
-      .from("Users")
-      .update({ credits: usercredits - 1 })
-      .eq("email", user?.email)
-      .select();
+    await fetch("/api/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user?.email, credits: usercredits - 1 }),
+    });
   };
 
   const onCopyLink = async () => {

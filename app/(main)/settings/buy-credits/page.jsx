@@ -4,43 +4,29 @@ import { useState, useEffect } from "react";
 import Script from "next/script";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/services/supabaseClient";
+import { useUser } from "@/app/provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function BuyCredits() {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUser();
   const [creditInput, setCreditInput] = useState("");
   const [credits, setCredits] = useState();
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUserAndCredits = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-
-      if (user) {
-        const { data: Users, error } = await supabase
-          .from("Users")
-          .select("credits")
-          .eq("email", user.user_metadata?.email);
-        if (error) console.error(error);
-        else setCredits(Users[0].credits);
-      }
-    };
-
-    fetchUserAndCredits();
-  }, []);
+    setCredits(user?.credits);
+  }, [user]);
 
   const BuyCredits = async () => {
     try {
+      setLoading(true);
       const creditsToBuy = Number(creditInput);
 
       if (!creditsToBuy || creditsToBuy <= 0) {
         toast("Please enter a valid number of credits");
+        setLoading(false);
         return;
       }
 
@@ -56,6 +42,7 @@ export default function BuyCredits() {
 
       if (!data.id) {
         toast("Failed to create order");
+        setLoading(false);
         return;
       }
 
@@ -68,14 +55,17 @@ export default function BuyCredits() {
         order_id: data.id,
         handler: async function (response) {
           toast("Payment Successful!");
-          const { data, error } = await supabase
-            .from("Users")
-            .update({ credits: credits + creditsToBuy })
-            .eq("email", user?.user_metadata?.email)
-            .select();
-
-          if (error) console.error(error);
-          setCredits(data[0]?.credits);
+          const creditResponse = await fetch("/api/users", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: user?.email,
+              creditDelta: creditsToBuy,
+            }),
+          });
+          const creditData = await creditResponse.json();
+          setCredits(creditData.user?.credits);
+          setUser?.(creditData.user);
           router.push("/settings");
         },
         prefill: {
@@ -89,12 +79,14 @@ export default function BuyCredits() {
 
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
+      setLoading(false);
 
       paymentObject.on("payment.failed", function (response) {
         toast("Payment failed: " + response.error.description);
       });
     } catch (err) {
       toast("Something went wrong. Try again!");
+      setLoading(false);
     }
   };
 
