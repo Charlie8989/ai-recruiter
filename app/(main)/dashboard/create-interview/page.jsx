@@ -54,7 +54,7 @@ function CreateInterview() {
   };
 
   return (
-    <div className="w-full mt-10 px-10 py-7 md:px-24 lg:px-44 xl:px-56 bg-white rounded-md">
+    <div className="w-full mt-10 px-10 py-7 md:px-24 lg:px-44 xl:px-56 bg-[#f8fafc] rounded-xl border border-[#cbd5e8] shadow-[0_14px_35px_rgba(15,23,42,0.08)]">
       <div className="flex w-full gap-4">
         <button
           onClick={() => router.back()}

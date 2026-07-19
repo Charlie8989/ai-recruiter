@@ -87,7 +87,7 @@ const Questions_list = ({
   return (
     <div
       className={`p-5 rounded-xl border flex flex-col gap-5 ${
-        loading ? "bg-blue-100" : "bg-white"
+        loading ? "bg-blue-100" : "bg-[#f8fafc]"
       }`}
     >
       {/* Step 1: Show loading */}

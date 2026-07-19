@@ -33,14 +33,14 @@ function CandidateList({ candidateList }) {
   return (
     <div className="w-full p-5">
       {!candidateList || candidateList.length === 0 ? (
-        <div className="w-full bg-white rounded-md p-5 flex justify-center">
+        <div className="w-full bg-[#f8fafc] rounded-xl border border-[#cbd5e8] p-5 flex justify-center shadow-sm">
           No Candidates Yet
         </div>
       ) : (
         candidateList.map((candidate, idx) => (
           <div
             key={idx}
-            className="bg-white shadow-md p-4 rounded-md mb-4 flex justify-between items-center"
+            className="bg-[#f8fafc] border border-[#cbd5e8] shadow-md p-4 rounded-xl mb-4 flex justify-between items-center"
           >
             <div>
               <div className="flex gap-3 mb-1 items-center">

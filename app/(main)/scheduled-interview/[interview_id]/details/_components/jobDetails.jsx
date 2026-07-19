@@ -10,7 +10,7 @@ function JobDetails({ interviewDetail }) {
   if (!interviewDetail) return null;
 
   return (
-    <div className="w-full rounded-md bg-white p-5">
+    <div className="w-full rounded-xl border border-[#cbd5e8] bg-[#f8fafc] p-5 shadow-sm">
       <div>
         <p className="text-lg mb-3 capitalize font-bold">
           {interviewDetail.jobPosition}

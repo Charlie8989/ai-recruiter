@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Copy, Info, Send, Video } from "lucide-react";
+import { BriefcaseBusiness, Copy, Info, Send } from "lucide-react";
 import moment from "moment";
 import React from "react";
 import { toast } from "sonner";
@@ -35,39 +35,40 @@ Team BOLOBOSS`
   };
 
   return (
-    <div className="p-5 rounded-lg bg-white w-full">
+    <div className="flex min-h-[205px] w-full flex-col rounded-xl border border-[#cbd5e8] bg-[#f8fafc] p-4 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:border-[#2E318F]/35 hover:shadow-[0_16px_34px_rgba(46,49,143,0.14)]">
       <div className="flex items-center justify-between">
-        {!viewDetail ? (
-          <div className="rounded-full bg-blue-900 sm:w-6 sm:h-6 w-3 h-3"></div>
-        ) : (
-          <div className="rounded-full bg-gray-400 sm:w-6 sm:h-6 w-3 h-3"></div>
-        )}
-        <span className="sm:text-xs text-sm">
+        <div
+          className={`flex h-9 w-9 items-center justify-center rounded-full ${
+            viewDetail ? "bg-emerald-50 text-emerald-700" : "bg-[#eef2ff] text-[#2E318F]"
+          }`}
+        >
+          <BriefcaseBusiness className="h-4 w-4" />
+        </div>
+        <span className="rounded-full bg-[#eef3fb] px-3 py-1 text-xs font-semibold text-gray-700 ring-1 ring-[#cbd5e8]">
           {moment(interview?.created_at).format("DD MMM yyy")}
         </span>
-        
       </div>
-      <hr className="my-2 " />
-      <div className="text-md sm:text-lg font-semibold capitalize">
-        {interview?.jobPosition}
+      <hr className="my-3 border-[#dfe5f2]" />
+      <div className="min-h-12 text-base font-bold capitalize leading-snug text-gray-950">
+        {interview?.jobPosition || "Untitled interview"}
       </div>
-      <div className="flex my-2 justify-between">
-        <div className=" text-nowrap sm:text-md text-xs">
-          {interview?.duration}
+      <div className="mt-2 flex items-center justify-between">
+        <div className="rounded-md bg-[#eef3fb] px-3 py-1 text-sm font-semibold text-gray-700">
+          {interview?.duration || "15-min"}
         </div>
         {!viewDetail ? (
           ""
         ) : (
-          <span className="text-green-600 text-nowrap sm:text-md text-xs">
+          <span className="text-nowrap rounded-md bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
             {interview?.["feedback"]?.length + " "}Candidates
           </span>
         )}
       </div>
-      <div className="flex justify-between flex-col sm:flex-row gap-2 mt-2">
+      <div className="mt-auto flex flex-col justify-between gap-2 pt-4 sm:flex-row">
         {!viewDetail ? (
           <>
             <Button
-              className="w-full sm:w-auto flex items-center gap-2 justify-center"
+              className="h-10 w-full justify-center border-[#9aa8c1] bg-[#e7ecf5] font-semibold text-gray-950 shadow-sm hover:bg-[#dfe6f2] sm:w-auto"
               onClick={copyURL}
               variant="outline"
             >
@@ -75,7 +76,7 @@ Team BOLOBOSS`
               Copy Link
             </Button>
             <Button
-              className="w-full sm:w-auto flex items-center gap-2 justify-center"
+              className="h-10 w-full justify-center bg-[#2E318F] text-white hover:bg-[#242773] sm:w-auto"
               onClick={onSend}
             >
               <Send className="w-4 h-4" />

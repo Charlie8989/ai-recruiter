@@ -37,7 +37,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
           <input
             type="text"
             placeholder="e.g. Web Developer"
-            className="p-4 bg-white w-full text-gray-500 rounded-md border border-black/40 outline-none"
+            className="p-4 bg-[#eef3fb] w-full text-gray-700 rounded-md border border-[#bfc8dc] outline-none focus:border-[#2E318F]"
             required
             onChange={(e) => {
               onhandleInputChange("jobPosition", e.target.value);
@@ -50,7 +50,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
           <p className="text-sm mb-3">Job Description</p>
           <textarea
             placeholder="Enter Detailed Job description..."
-            className="p-4 bg-white w-full text-gray-500 rounded-md border border-black/40 outline-none resize-none overflow-hidden"
+            className="p-4 bg-[#eef3fb] w-full text-gray-700 rounded-md border border-[#bfc8dc] outline-none resize-none overflow-hidden focus:border-[#2E318F]"
             rows={3}
             onInput={(e) => {
               e.target.style.height = "auto"; // reset
@@ -70,7 +70,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
               onhandleInputChange("duration", value);
             }}
           >
-            <SelectTrigger className="p-4 bg-white w-full text-gray-500 rounded-md border border-black/40 outline-none">
+            <SelectTrigger className="p-4 bg-[#eef3fb] w-full text-gray-700 rounded-md border border-[#bfc8dc] outline-none">
               <SelectValue placeholder="Select Duration" />
             </SelectTrigger>
             <SelectContent>
@@ -91,7 +91,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
                 ${
                   active.includes("technical")
                     ? "bg-[#2E318F] text-white border-blue-500"
-                    : "bg-white text-black border-black"
+                    : "bg-[#eef3fb] text-black border-[#bfc8dc]"
                 }
               `}
             >
@@ -105,7 +105,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
                 ${
                   active.includes("behavioral")
                     ? "bg-[#2E318F] text-white border-blue-500"
-                    : "bg-white text-black border-black"
+                    : "bg-[#eef3fb] text-black border-[#bfc8dc]"
                 }
               `}
             >
@@ -119,7 +119,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
                 ${
                   active.includes("experience")
                     ? "bg-[#2E318F] text-white border-blue-500"
-                    : "bg-white text-black border-black"
+                    : "bg-[#eef3fb] text-black border-[#bfc8dc]"
                 }
               `}
             >
@@ -133,7 +133,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
                 ${
                   active.includes("solving")
                     ? "bg-[#2E318F] text-white border-blue-500"
-                    : "bg-white text-black border-black"
+                    : "bg-[#eef3fb] text-black border-[#bfc8dc]"
                 }
               `}
             >
@@ -147,7 +147,7 @@ const Form_container = ({ onhandleInputChange, gotoNext }) => {
                 ${
                   active.includes("leadership")
                     ? "bg-[#2E318F] text-white border-blue-500"
-                    : "bg-white text-black border-black"
+                    : "bg-[#eef3fb] text-black border-[#bfc8dc]"
                 }
               `}
             >

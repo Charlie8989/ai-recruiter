@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/src/db";
 import { feedback } from "@/src/db/schema";
 import { mapFeedback } from "@/src/db/mappers";
+import { privateJson } from "@/lib/api-cache";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -22,7 +23,7 @@ export async function GET(request) {
     .where(eq(feedback.interviewid, interviewID))
     .orderBy(desc(feedback.id));
 
-  return NextResponse.json({ feedback: rows.map(mapFeedback) });
+  return privateJson({ feedback: rows.map(mapFeedback) });
 }
 
 export async function POST(request) {

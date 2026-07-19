@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { InterviewGridSkeleton } from "@/components/interview-card-skeleton";
 import InterviewCard from "../dashboard/_components/InterviewCard";
 
 const AllInterview = () => {
@@ -24,10 +25,11 @@ const AllInterview = () => {
   return (
     <div>
     <h2 className="text-2xl font-bold">All Previously Created Interview</h2>
+      {!interviewList && <div className="mt-5"><InterviewGridSkeleton /></div>}
       {interviewList?.length == 0 && (
         <Link
           href="/dashboard/create-interview"
-          className= "mt-5 w-full h-40 gap-y-2 flex flex-col justify-center items-center bg-white border-1 border-black border-dashed rounded-md text-center"
+          className= "mt-5 flex h-48 w-full flex-col items-center justify-center gap-y-3 rounded-xl border border-dashed border-[#9aa6d8] bg-[#f8fafc] text-center shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
         >
           <div className="w-full flex justify-center">
             <Video />
@@ -36,8 +38,8 @@ const AllInterview = () => {
           <Button className="w-1/2">+ Create New Interview</Button>
         </Link>
       )}
-      {interviewList && (
-        <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
+      {interviewList && interviewList.length > 0 && (
+        <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {interviewList.map((interview, index) => (
             <InterviewCard interview={interview} key={index} viewDetail={false}/>
           ))}

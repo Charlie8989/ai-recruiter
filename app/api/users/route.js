@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/src/db";
 import { users } from "@/src/db/schema";
 import { mapUser } from "@/src/db/mappers";
+import { privateJson } from "@/lib/api-cache";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -15,7 +16,7 @@ export async function GET(request) {
 
   const rows = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
-  return NextResponse.json({ user: mapUser(rows[0]) });
+  return privateJson({ user: mapUser(rows[0]) });
 }
 
 export async function POST(request) {

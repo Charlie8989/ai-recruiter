@@ -4,6 +4,7 @@ import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const page = () => {
   const { user } = useUser();
@@ -18,6 +19,22 @@ const page = () => {
   const proceedtoBuy = () => {
     router.push("/settings/buy-credits");
   };
+
+  if (!user) {
+    return (
+      <div className="mx-auto w-full max-w-3xl rounded-2xl border border-[#dfe5f2] bg-[#f8fafc] p-6 shadow-[0_14px_30px_rgba(15,23,42,0.06)]">
+        <div className="flex flex-col items-center gap-4 sm:flex-row">
+          <Skeleton className="h-20 w-20 rounded-full bg-[#e4e9f5]" />
+          <div className="w-full space-y-3">
+            <Skeleton className="h-7 w-48 bg-[#e4e9f5]" />
+            <Skeleton className="h-4 w-64 bg-[#e4e9f5]" />
+          </div>
+        </div>
+        <Skeleton className="mt-8 h-24 w-full bg-[#e4e9f5]" />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="w-full p-5">
@@ -44,7 +61,7 @@ const page = () => {
             Log Out
           </Button>
         </div>
-        <div className="bg-white rounded-md w-[70vw] sm:w-[50vw] mx-auto sm:my-6 my-3">
+        <div className="bg-[#f8fafc] rounded-xl border border-[#dfe5f2] shadow-[0_14px_30px_rgba(15,23,42,0.06)] w-[70vw] sm:w-[50vw] mx-auto sm:my-6 my-3">
           <div className="px-5 py-3">
             <p className="text-lg gap-x-2">
               Credits Left :

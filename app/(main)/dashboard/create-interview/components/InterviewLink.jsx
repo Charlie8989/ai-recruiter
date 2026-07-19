@@ -85,7 +85,7 @@ Team BOLOBOSS`
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex flex-col items-center p-6 sm:p-8 rounded-lg border border-gray-300 bg-white">
+      <div className="flex flex-col items-center p-6 sm:p-8 rounded-lg border border-[#cbd5e8] bg-[#f8fafc] shadow-sm">
         <img
           src="/checktick.png"
           className="w-20 sm:w-24 md:w-28"
@@ -99,7 +99,7 @@ Team BOLOBOSS`
         </p>
       </div>
 
-      <div className="my-6 p-4 sm:p-6 w-full border rounded-lg border-gray-300 bg-white">
+      <div className="my-6 p-4 sm:p-6 w-full border rounded-lg border-[#cbd5e8] bg-[#f8fafc] shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h3 className="text-lg sm:text-xl font-semibold">Interview Link</h3>
           <span className="text-blue-600 py-1 px-3 rounded-md text-xs sm:text-sm bg-blue-100 w-fit">
@@ -109,7 +109,7 @@ Team BOLOBOSS`
 
         <div className="my-4 sm:my-6 flex flex-col sm:flex-row gap-2">
           <input
-            className="border border-gray-300 flex-1 p-2 sm:p-3 font-medium text-sm sm:text-base text-gray-700 rounded-md sm:rounded-r-none bg-gray-50"
+            className="border border-[#cbd5e8] flex-1 p-2 sm:p-3 font-medium text-sm sm:text-base text-gray-700 rounded-md sm:rounded-r-none bg-[#eef3fb]"
             defaultValue={getInterviewLink()}
             // defaultValue={"Debugging..."}
             disabled
@@ -139,18 +139,18 @@ Team BOLOBOSS`
         </div>
       </div>
 
-      <div className="my-6 p-4 sm:p-6 w-full border rounded-lg border-gray-300 bg-white">
+      <div className="my-6 p-4 sm:p-6 w-full border rounded-lg border-[#cbd5e8] bg-[#f8fafc] shadow-sm">
         <h3 className="text-lg sm:text-xl font-semibold mb-4">Share Via</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-gray-300 hover:bg-gray-50 transition-colors">
+          <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-[#cbd5e8] bg-[#eef3fb] hover:bg-[#e7ecf5] transition-colors">
             <Mail className="w-4 h-4" />
             <span className="text-sm sm:text-base">Email</span>
           </button>
-          <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-gray-300 hover:bg-gray-50 transition-colors">
+          <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-[#cbd5e8] bg-[#eef3fb] hover:bg-[#e7ecf5] transition-colors">
             <Slack className="w-4 h-4" />
             <span className="text-sm sm:text-base">Slack</span>
           </button>
-          <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-gray-300 hover:bg-gray-50 transition-colors">
+          <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-[#cbd5e8] bg-[#eef3fb] hover:bg-[#e7ecf5] transition-colors">
             <img
               className="w-4 h-4"
               src="https://img.icons8.com/ios/50/whatsapp--v1.png"
@@ -163,7 +163,7 @@ Team BOLOBOSS`
 
       <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6">
         <Link href="/dashboard" className="w-full sm:w-auto">
-          <Button className="w-full bg-white text-gray-900 border border-gray-300 hover:bg-gray-50">
+          <Button className="w-full bg-[#eef3fb] text-gray-900 border border-[#cbd5e8] hover:bg-[#e7ecf5]">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back To Dashboard
           </Button>

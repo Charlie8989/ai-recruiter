@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/src/db";
 import { feedback, interview } from "@/src/db/schema";
 import { mapFeedback, mapInterview } from "@/src/db/mappers";
+import { privateJson } from "@/lib/api-cache";
 
 function normalizeType(type) {
   if (typeof type === "string") return type;
@@ -53,7 +54,7 @@ export async function GET(request) {
     ? await feedbackByInterviewIds(rows.map((row) => row.interviewid))
     : null;
 
-  return NextResponse.json({
+  return privateJson({
     interviews: rows.map((row) =>
       mapInterview(
         row,

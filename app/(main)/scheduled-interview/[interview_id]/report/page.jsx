@@ -46,8 +46,8 @@ const ReportPage = () => {
   const communication = Number(rating.communication) || 0;
 
   return (
-    <div className="bg-gray-100 p-0 sm:p-10 flex justify-center items-center">
-      <div className="sm:w-lg w-[90vw] bg-white rounded-xl shadow-lg p-6">
+    <div className="bg-[#e7ecf5] p-0 sm:p-10 flex justify-center items-center">
+      <div className="sm:w-lg w-[90vw] bg-[#f8fafc] rounded-xl shadow-lg p-6">
         <div className="flex items-center space-x-3 mb-6">
           <img
             src={

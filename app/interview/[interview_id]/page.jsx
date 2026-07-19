@@ -14,6 +14,7 @@ const page = () => {
   const [interviewData, setInterviewData] = useState();
   const [userName, setuserName] = useState();
   const [loading, setLoading] = useState(false);
+  const [joining, setJoining] = useState(false);
   const { interviewInfo, setinterviewInfo } = useContext(InterviewDataContext);
   const router = useRouter();
 
@@ -51,17 +52,21 @@ const page = () => {
   // console.log(userName)
 
   const adduserNametoDB = async () => {
-    setLoading(true);
-    const response = await fetch(`/api/interviews/${interview_id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: userName }),
-    });
-    const data = await response.json();
+    setJoining(true);
+    try {
+      const response = await fetch(`/api/interviews/${interview_id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: userName }),
+      });
+      const data = await response.json();
 
-    setinterviewInfo(data.interview);
-    router.push("/interview/" + interview_id + "/start");
-    setLoading(false);
+      setinterviewInfo(data.interview);
+      router.push("/interview/" + interview_id + "/start");
+    } catch (error) {
+      setJoining(false);
+      toast("Could not join interview. Please try again.");
+    }
   };
 
   //debbuging area
@@ -69,20 +74,35 @@ const page = () => {
   // console.log(interviewData);
 
   return (
-    <div className="p-3">
+    <div className="min-h-[calc(100vh-80px)] bg-[#e7ecf5] p-3">
       <div className="w-full flex items-center justify-center">
         {loading && (
-          <div className="w-full  flex justify-center items-center text-sm gap-2">
+          <div className="w-full flex justify-center items-center text-sm gap-2 py-24 text-[#2E318F]">
             <Loader2Icon className="w-8 text-blue-900 h-8 animate-spin" />
             Checking Your Interview Link
           </div>
         )}
 
         {!loading && (
-          <div className="sm:w-2/3 my-5 w-full flex flex-col items-center bg-white rounded-md">
-            <div className="flex flex-col justify-center items-center p-4">
+          <div className="relative my-5 flex w-full flex-col items-center overflow-hidden rounded-2xl border border-[#dfe5f2] bg-[#f8fafc] shadow-[0_20px_60px_rgba(15,23,42,0.1)] sm:w-2/3">
+            {joining && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-[#f8fafc]/90 px-6 text-center backdrop-blur-sm">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#eef2ff]">
+                  <Loader2Icon className="h-8 w-8 animate-spin text-[#2E318F]" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-950">
+                    Joining your interview
+                  </h2>
+                  <p className="mt-1 text-sm text-gray-600">
+                    Setting up your AI recruiter room. This will only take a moment.
+                  </p>
+                </div>
+              </div>
+            )}
+            <div className="flex w-full flex-col items-center border-b border-[#e6ebf5] bg-[#fbfcff] p-5">
               <span className="text-2xl font-bold text-black">BOLOBOSS</span>
-              <span>AI-Powered Interview Platform</span>
+              <span className="text-sm text-gray-600">AI-Powered Interview Platform</span>
             </div>
             <div className="my-8">
               <img
@@ -119,7 +139,7 @@ const page = () => {
               />
             </div>
 
-            <div className="p-5 mb-7 w-9/10 sm:w-4/5 rounded-xl border flex flex-col gap-5 bg-blue-100">
+            <div className="p-5 mb-7 w-9/10 sm:w-4/5 rounded-xl border border-[#bfd3ff] flex flex-col gap-5 bg-[#eaf2ff]">
               <div className="flex  items-center gap-3">
                 <div>
                   <h2 className="text-blue-500 flex gap-3 items-center">
@@ -130,9 +150,7 @@ const page = () => {
                     <li className="list-disc">
                       Ensure you have stable internet connection
                     </li>
-                    <li className="list-disc">
-                      Test your camera and microphone
-                    </li>
+                    <li className="list-disc">Test your microphone before joining</li>
                     <li className="list-disc">
                       Find a quiet place for the interview
                     </li>
@@ -141,7 +159,7 @@ const page = () => {
               </div>
             </div>
 
-            <div className="flex mb-7 justify-between gap-x-5">
+            <div className="flex mb-7 flex-wrap justify-center gap-4">
               <MicTestButton />
 
               <div
@@ -155,9 +173,12 @@ const page = () => {
                   }
                 }}
               >
-                <Button disabled={!userName || userName.length < 3}>
-                  {!loading && <Video className="w-4" />}
-                  {loading && <Loader2Icon className="w-4" />}
+                <Button
+                  disabled={!userName || userName.length < 3 || joining}
+                  className="bg-[#2E318F] hover:bg-[#242773]"
+                >
+                  {!joining && <Video className="w-4" />}
+                  {joining && <Loader2Icon className="w-4 animate-spin" />}
                   Join Interview
                 </Button>
               </div>

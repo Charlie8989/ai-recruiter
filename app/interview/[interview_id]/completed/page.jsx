@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function InterviewCompleted() {
   const { interview_id } = useParams();
@@ -36,7 +37,15 @@ function InterviewCompleted() {
             Thanks For Using Our Website
           </span>
           <div className="p-5 mt-3 sm:mt-7 w-[80vw] sm:w-[50vw] rounded-xl border flex flex-col gap-5 bg-blue-100 ">
-            <span className="text-blue-500 sm:text-md text-sm">{feedback}</span>
+            {feedback ? (
+              <span className="text-blue-500 sm:text-md text-sm">{feedback}</span>
+            ) : (
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-full bg-[#bfd3ff]" />
+                <Skeleton className="h-4 w-5/6 bg-[#bfd3ff]" />
+                <Skeleton className="h-4 w-2/3 bg-[#bfd3ff]" />
+              </div>
+            )}
           </div>
         </div>
         <div className="w-full flex justify-center gap-1 text-nowrap sm:gap-2 items-center">

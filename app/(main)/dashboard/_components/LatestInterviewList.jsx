@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Video } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { InterviewGridSkeleton } from "@/components/interview-card-skeleton";
 import InterviewCard from "./InterviewCard";
 
 const PreviousCreated = () => {
@@ -24,20 +25,21 @@ const PreviousCreated = () => {
 
   return (
     <div>
+      {!interviewList && <InterviewGridSkeleton count={3} />}
       {interviewList?.length == 0 && (
         <Link
           href="/dashboard/create-interview"
-          className="w-full h-40 gap-y-2 flex flex-col justify-center items-center bg-white border-1 border-black border-dashed rounded-md text-center"
+          className="flex h-48 w-full flex-col items-center justify-center gap-y-3 rounded-xl border border-dashed border-[#9aa6d8] bg-[#f8fafc] text-center shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
         >
           <div className="w-full flex justify-center">
             <Video />
           </div>
-          <p>You Don't Have Any Interview Created !</p>
-          <Button className="w-1/2">+ Create New Interview</Button>
+          <p className="font-semibold text-gray-700">You Don't Have Any Interview Created !</p>
+          <Button className="w-1/2 bg-[#2E318F] hover:bg-[#242773]">+ Create New Interview</Button>
         </Link>
       )}
-      {interviewList && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
+      {interviewList && interviewList.length > 0 && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {interviewList.map((interview, index) => (
             <InterviewCard interview={interview} key={index} />
           ))}

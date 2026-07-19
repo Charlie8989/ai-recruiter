@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/app/provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BuyCredits() {
   const [loading, setLoading] = useState(false);
@@ -90,11 +91,21 @@ export default function BuyCredits() {
     }
   };
 
+  if (!user) {
+    return (
+      <div className="mx-auto w-[70vw] rounded-xl border border-[#dfe5f2] bg-[#f8fafc] p-5 shadow-[0_14px_30px_rgba(15,23,42,0.06)] sm:w-[50vw]">
+        <Skeleton className="mb-4 h-6 w-32 bg-[#e4e9f5]" />
+        <Skeleton className="h-12 w-full bg-[#e4e9f5]" />
+        <Skeleton className="mt-5 h-10 w-full bg-[#e4e9f5]" />
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Razorpay checkout script */}
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-        <div className="w-[70vw] mx-auto sm:w-[50vw] bg-white p-5 rounded-md ">
+        <div className="w-[70vw] mx-auto sm:w-[50vw] bg-[#f8fafc] p-5 rounded-xl border border-[#dfe5f2] shadow-[0_14px_30px_rgba(15,23,42,0.06)]">
           <p className="text-lg font-bold mb-3">Buy credits</p>
           <Input
             value={creditInput}
@@ -110,7 +121,7 @@ export default function BuyCredits() {
             {loading ? "Processing..." : "Buy Credits"}
           </Button>
         </div>
-        <div className="bg-white mx-auto w-[70vw] sm:w-[50vw] p-4 rounded-md mt-4 text-gray-700">
+        <div className="bg-[#f8fafc] mx-auto w-[70vw] sm:w-[50vw] p-4 rounded-xl border border-[#dfe5f2] shadow-[0_14px_30px_rgba(15,23,42,0.04)] mt-4 text-gray-700">
           <h3 className="font-semibold mb-1">Quick Tips</h3>
           <ul className="list-disc ml-5 marker:text-blue-700">
             <li>Each mock interview costs 5 credits.</li>

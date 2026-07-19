@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Calendar,
   LayoutDashboard,
@@ -17,6 +19,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const items = [
@@ -44,9 +47,11 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
-    <Sidebar className="bg-white text-gray-950 [&_[data-sidebar=sidebar]]:bg-white [&_[data-sidebar=sidebar]]:text-gray-950">
-      <SidebarContent className="bg-white text-gray-950">
+    <Sidebar className="bg-[#f8fafc] text-gray-950 [&_[data-sidebar=sidebar]]:border-r [&_[data-sidebar=sidebar]]:border-[#d7deeb] [&_[data-sidebar=sidebar]]:bg-[#f8fafc] [&_[data-sidebar=sidebar]]:text-gray-950">
+      <SidebarContent className="bg-[#f8fafc] text-gray-950">
         <SidebarGroup>
         <Link href={"/dashboard"}>
           <SidebarGroupLabel className="text-2xl text-black font-bold my-4">
@@ -57,10 +62,20 @@ export function AppSidebar() {
             <Button className="mb-4">+ Create New Interview</Button>
           </Link>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="mt-3 overflow-hidden rounded-xl border border-[#d7deeb] bg-[#eef3fb]">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                <SidebarMenuItem
+                  key={item.title}
+                  className="border-b border-[#d7deeb] last:border-b-0"
+                >
+                  <SidebarMenuButton
+                    asChild
+                    className={`h-12 rounded-none px-3 text-[15px] font-medium hover:bg-[#e2e9f5] ${
+                      pathname === item.url || pathname.startsWith(item.url + "/")
+                        ? "bg-[#dfe6f7] text-[#2E318F]"
+                        : "text-gray-800"
+                    }`}
+                  >
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

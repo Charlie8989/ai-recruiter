@@ -31,7 +31,7 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 background-texture">
-      <div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-8 shadow-xl">
+      <div className="w-full max-w-md space-y-6 rounded-2xl border border-[#cbd5e8] bg-[#f8fafc] p-8 shadow-xl">
         <img
           src="/login.svg"
           className="mx-auto w-48"
@@ -50,7 +50,7 @@ const Login = () => {
         <Button
           onClick={signinWithGoogle}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-3 rounded-lg border-2 border-gray-200 bg-white py-6 font-semibold text-gray-900 shadow-sm transition-all hover:border-gray-300 hover:bg-gray-50 hover:shadow-md"
+          className="flex w-full items-center justify-center gap-3 rounded-lg border-2 border-[#cbd5e8] bg-[#eef3fb] py-6 font-semibold text-gray-900 shadow-sm transition-all hover:border-[#b8c4da] hover:bg-[#e7ecf5] hover:shadow-md"
         >
           {loading ? (
             <Loader2Icon className="h-5 w-5 animate-spin" />

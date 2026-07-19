@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/src/db";
 import { feedback, interview } from "@/src/db/schema";
 import { mapFeedback, mapInterview } from "@/src/db/mappers";
+import { privateJson } from "@/lib/api-cache";
 
 function buildInterviewFilter(interviewId, email) {
   const filter = eq(interview.interviewid, interviewId);
@@ -28,7 +29,7 @@ export async function GET(request, { params }) {
   const row = rows[0];
 
   if (!row) {
-    return NextResponse.json({ interview: null }, { status: 404 });
+    return privateJson({ interview: null }, { status: 404 });
   }
 
   let mappedFeedback;
@@ -42,7 +43,7 @@ export async function GET(request, { params }) {
     mappedFeedback = feedbackRows.map(mapFeedback);
   }
 
-  return NextResponse.json({
+  return privateJson({
     interview: mapInterview(row, includeFeedback ? mappedFeedback : undefined),
   });
 }
