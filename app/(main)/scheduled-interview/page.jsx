@@ -10,10 +10,18 @@ import { InterviewGridSkeleton } from "@/components/interview-card-skeleton";
 function ScheduledInterview() {
   const { user } = useUser();
   const [interviewList, setInterviewList] = useState();
+  const [compactCards, setCompactCards] = useState(false);
 
   useEffect(() => {
     user && getInterviewList();
   }, [user]);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem("boloboss-settings");
+    if (saved) {
+      setCompactCards(Boolean(JSON.parse(saved)?.compactCards));
+    }
+  }, []);
 
   const getInterviewList = async () => {
     const response = await fetch(
@@ -23,6 +31,12 @@ function ScheduledInterview() {
     );
     const data = await response.json();
     setInterviewList(data.interviews || []);
+  };
+
+  const removeInterview = (interviewId) => {
+    setInterviewList((list = []) =>
+      list.filter((interview) => interview.interviewID !== interviewId)
+    );
   };
 
   return (
@@ -50,6 +64,8 @@ function ScheduledInterview() {
               interview={interview}
               key={index}
               viewDetail={true}
+              onDeleted={removeInterview}
+              compact={compactCards}
             />
           ))}
         </div>

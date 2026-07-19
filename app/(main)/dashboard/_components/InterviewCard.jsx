@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { BriefcaseBusiness, Copy, Info, Send } from "lucide-react";
+import { BriefcaseBusiness, Copy, Eye, Loader2, Send, Trash2 } from "lucide-react";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 
-function InterviewCard({ interview, viewDetail = false }) {
+function InterviewCard({
+  interview,
+  viewDetail = false,
+  onDeleted,
+  compact = false,
+}) {
+  const [deleting, setDeleting] = useState(false);
   const URL = process.env.NEXT_PUBLIC_HOST_URL + "/" + interview?.interviewID;
 
   const copyURL = async () => {
@@ -34,13 +40,46 @@ Team BOLOBOSS`
     );
   };
 
+  const onDelete = async () => {
+    const confirmed = window.confirm(
+      "Delete this interview and all related feedback?"
+    );
+
+    if (!confirmed) return;
+
+    setDeleting(true);
+    try {
+      const response = await fetch(
+        `/api/interviews/${interview?.interviewID}?email=${encodeURIComponent(
+          interview?.userEmail || ""
+        )}`,
+        { method: "DELETE" }
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      toast("Interview deleted");
+      onDeleted?.(interview?.interviewID);
+    } catch (error) {
+      toast("Could not delete interview");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-[205px] w-full flex-col rounded-xl border border-[#cbd5e8] bg-[#f8fafc] p-4 shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:border-[#2E318F]/35 hover:shadow-[0_16px_34px_rgba(46,49,143,0.14)]">
+    <div
+      className={`flex w-full flex-col rounded-xl border border-[#cbd5e8] bg-[#f8fafc] shadow-[0_10px_24px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:border-[#2E318F]/35 hover:shadow-[0_16px_34px_rgba(46,49,143,0.14)] ${
+        compact ? "min-h-[170px] p-3" : "min-h-[205px] p-4"
+      }`}
+    >
       <div className="flex items-center justify-between">
         <div
-          className={`flex h-9 w-9 items-center justify-center rounded-full ${
+          className={`flex items-center justify-center rounded-full ${
             viewDetail ? "bg-emerald-50 text-emerald-700" : "bg-[#eef2ff] text-[#2E318F]"
-          }`}
+          } ${compact ? "h-8 w-8" : "h-9 w-9"}`}
         >
           <BriefcaseBusiness className="h-4 w-4" />
         </div>
@@ -48,11 +87,15 @@ Team BOLOBOSS`
           {moment(interview?.created_at).format("DD MMM yyy")}
         </span>
       </div>
-      <hr className="my-3 border-[#dfe5f2]" />
-      <div className="min-h-12 text-base font-bold capitalize leading-snug text-gray-950">
+      <hr className={`${compact ? "my-2" : "my-3"} border-[#dfe5f2]`} />
+      <div
+        className={`font-bold capitalize leading-snug text-gray-950 ${
+          compact ? "min-h-8 text-sm" : "min-h-12 text-base"
+        }`}
+      >
         {interview?.jobPosition || "Untitled interview"}
       </div>
-      <div className="mt-2 flex items-center justify-between">
+      <div className={`${compact ? "mt-1" : "mt-2"} flex items-center justify-between`}>
         <div className="rounded-md bg-[#eef3fb] px-3 py-1 text-sm font-semibold text-gray-700">
           {interview?.duration || "15-min"}
         </div>
@@ -64,11 +107,11 @@ Team BOLOBOSS`
           </span>
         )}
       </div>
-      <div className="mt-auto flex flex-col justify-between gap-2 pt-4 sm:flex-row">
+      <div className={`mt-auto grid grid-cols-1 gap-2 sm:grid-cols-2 ${compact ? "pt-3" : "pt-4"}`}>
         {!viewDetail ? (
           <>
             <Button
-              className="h-10 w-full justify-center border-[#9aa8c1] bg-[#e7ecf5] font-semibold text-gray-950 shadow-sm hover:bg-[#dfe6f2] sm:w-auto"
+              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#9aa8c1] bg-[#e7ecf5] font-semibold text-gray-950 shadow-sm hover:bg-[#dfe6f2] sm:w-auto`}
               onClick={copyURL}
               variant="outline"
             >
@@ -76,22 +119,50 @@ Team BOLOBOSS`
               Copy Link
             </Button>
             <Button
-              className="h-10 w-full justify-center bg-[#2E318F] text-white hover:bg-[#242773] sm:w-auto"
+              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center bg-[#2E318F] text-white hover:bg-[#242773] sm:w-auto`}
               onClick={onSend}
             >
               <Send className="w-4 h-4" />
               Send Link
             </Button>
+            <Button
+              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#f0b4b4] bg-[#fff1f1] font-semibold text-[#b42323] hover:bg-[#ffe4e4] sm:col-span-2`}
+              onClick={onDelete}
+              variant="outline"
+              disabled={deleting}
+            >
+              {deleting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Trash2 className="w-4 h-4" />
+              )}
+              {compact ? "Delete" : "Delete Interview"}
+            </Button>
           </>
         ) : (
-          <Link
-            className="w-full"
-            href={"/scheduled-interview/" + interview?.interviewID + "/details"}
-          >
-            <Button className="w-full" variant="outline">
-              <Info className="w-4" /> View Details
+          <>
+            <Link
+              className="w-full"
+              href={"/scheduled-interview/" + interview?.interviewID + "/details"}
+            >
+              <Button className={`${compact ? "h-9 text-sm" : "h-10"} w-full bg-[#2E318F] text-white shadow-sm hover:bg-[#242773]`}>
+                <Eye className="w-4 h-4" /> View Feedback
+              </Button>
+            </Link>
+            <Button
+              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#f0b4b4] bg-[#fff1f1] font-semibold text-[#b42323] hover:bg-[#ffe4e4]`}
+              onClick={onDelete}
+              variant="outline"
+              disabled={deleting}
+            >
+              {deleting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Trash2 className="w-4 h-4" />
+              )}
+              Delete
             </Button>
-          </Link>
+          </>
         )}
       </div>
     </div>

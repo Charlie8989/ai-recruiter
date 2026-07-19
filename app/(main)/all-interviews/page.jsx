@@ -10,10 +10,18 @@ import InterviewCard from "../dashboard/_components/InterviewCard";
 const AllInterview = () => {
   const { user } = useUser();
   const [interviewList, setInterviewList] = useState();
+  const [compactCards, setCompactCards] = useState(false);
 
   useEffect(() => {
     user && GetInterviewList();
   }, [user]);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem("boloboss-settings");
+    if (saved) {
+      setCompactCards(Boolean(JSON.parse(saved)?.compactCards));
+    }
+  }, []);
 
   const GetInterviewList = async () => {
     const response = await fetch(
@@ -21,6 +29,12 @@ const AllInterview = () => {
     );
     const data = await response.json();
     setInterviewList(data.interviews || []);
+  };
+
+  const removeInterview = (interviewId) => {
+    setInterviewList((list = []) =>
+      list.filter((interview) => interview.interviewID !== interviewId)
+    );
   };
   return (
     <div>
@@ -41,7 +55,13 @@ const AllInterview = () => {
       {interviewList && interviewList.length > 0 && (
         <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {interviewList.map((interview, index) => (
-            <InterviewCard interview={interview} key={index} viewDetail={false}/>
+            <InterviewCard
+              interview={interview}
+              key={index}
+              viewDetail={false}
+              onDeleted={removeInterview}
+              compact={compactCards}
+            />
           ))}
         </div>
       )}

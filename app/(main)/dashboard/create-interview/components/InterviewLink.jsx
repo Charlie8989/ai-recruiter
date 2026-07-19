@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Calendar,
+  CheckCircle2,
   Clock,
   CopyIcon,
   Ellipsis,
+  ExternalLink,
   Mail,
-  PlusIcon,
   Slack,
 } from "lucide-react";
 import Link from "next/link";
@@ -62,47 +63,24 @@ const InterviewLink = (props) => {
     window.open(URL, "_blank");
   };
 
-  const onSend = () => {
-    const subject = encodeURIComponent("BOLOBOSS Interview Link");
-    const body = encodeURIComponent(
-      `Thanks for using BOLOBOSS!
-
-Here is your interview link:
-${URL}
-
-You can create more interviews anytime on our website.
-
-Best regards,
-Team BOLOBOSS`
-    );
-    const to = interview?.userEmail;
-
-    window.open(
-      `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,
-      "_blank"
-    );
-  };
-
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex flex-col items-center p-6 sm:p-8 rounded-lg border border-[#cbd5e8] bg-[#f8fafc] shadow-sm">
-        <img
-          src="/checktick.png"
-          className="w-20 sm:w-24 md:w-28"
-          alt="Check Tick"
-        />
-        <h2 className="font-semibold text-lg sm:text-xl md:text-2xl mt-4 text-center">
+    <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="rounded-2xl border border-[#cbd5e8] bg-[#f8fafc] p-6 text-center shadow-[0_14px_35px_rgba(15,23,42,0.08)] sm:p-8">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#2E318F] ring-1 ring-[#cbd5e8]">
+          <CheckCircle2 className="h-9 w-9" />
+        </div>
+        <h2 className="mt-5 text-xl font-black sm:text-2xl">
           Your Interview Link Is Ready
         </h2>
-        <p className="text-sm sm:text-base text-gray-600 text-center mt-2 max-w-md">
+        <p className="mx-auto mt-2 max-w-md text-sm text-gray-600 sm:text-base">
           Share this link with your candidates to start the interview process
         </p>
       </div>
 
-      <div className="my-6 p-4 sm:p-6 w-full border rounded-lg border-[#cbd5e8] bg-[#f8fafc] shadow-sm">
+      <div className="my-6 w-full rounded-2xl border border-[#cbd5e8] bg-[#f8fafc] p-4 shadow-[0_14px_35px_rgba(15,23,42,0.08)] sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <h3 className="text-lg sm:text-xl font-semibold">Interview Link</h3>
-          <span className="text-blue-600 py-1 px-3 rounded-md text-xs sm:text-sm bg-blue-100 w-fit">
+          <h3 className="text-lg font-black sm:text-xl">Interview Link</h3>
+          <span className="w-fit rounded-full bg-[#eef2ff] px-3 py-1 text-xs font-bold text-[#2E318F] ring-1 ring-[#cbd5e8] sm:text-sm">
             Valid For 30 days
           </span>
         </div>
@@ -116,7 +94,7 @@ Team BOLOBOSS`
           />
           <button
             onClick={() => onCopyLink()}
-            className="bg-[#2E318F] hover:bg-[#2E318F]/90 text-white p-2 sm:p-3 flex justify-center items-center gap-2 rounded-md sm:rounded-l-none whitespace-nowrap transition-colors"
+            className="flex items-center justify-center gap-2 rounded-md bg-[#2E318F] p-2 text-white transition-colors hover:bg-[#2E318F]/90 sm:rounded-l-none sm:p-3"
           >
             <CopyIcon className="w-4 h-4" />
             <span className="text-sm sm:text-base">Copy Link</span>
@@ -139,8 +117,8 @@ Team BOLOBOSS`
         </div>
       </div>
 
-      <div className="my-6 p-4 sm:p-6 w-full border rounded-lg border-[#cbd5e8] bg-[#f8fafc] shadow-sm">
-        <h3 className="text-lg sm:text-xl font-semibold mb-4">Share Via</h3>
+      <div className="my-6 w-full rounded-2xl border border-[#cbd5e8] bg-[#f8fafc] p-4 shadow-[0_14px_35px_rgba(15,23,42,0.08)] sm:p-6">
+        <h3 className="mb-4 text-lg font-black sm:text-xl">Share Via</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button className="flex gap-2 items-center justify-center py-3 px-4 border rounded-md border-[#cbd5e8] bg-[#eef3fb] hover:bg-[#e7ecf5] transition-colors">
             <Mail className="w-4 h-4" />
@@ -172,7 +150,7 @@ Team BOLOBOSS`
           onClick={joinInterview}
           className="w-full sm:w-auto bg-[#2E318F] hover:bg-[#2E318F]/90"
         >
-          <PlusIcon className="w-4 h-4 mr-2" />
+          <ExternalLink className="w-4 h-4 mr-2" />
           Join Interview
         </Button>
       </div>

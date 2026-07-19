@@ -64,3 +64,28 @@ export async function PATCH(request, { params }) {
 
   return NextResponse.json({ interview: mapInterview(row) });
 }
+
+export async function DELETE(request, { params }) {
+  const { searchParams } = new URL(request.url);
+  const email = searchParams.get("email");
+  const { interview_id: interviewId } = await params;
+
+  if (!email) {
+    return NextResponse.json({ error: "email is required" }, { status: 400 });
+  }
+
+  const rows = await db
+    .select({ interviewid: interview.interviewid })
+    .from(interview)
+    .where(buildInterviewFilter(interviewId, email))
+    .limit(1);
+
+  if (!rows[0]) {
+    return NextResponse.json({ interview: null }, { status: 404 });
+  }
+
+  await db.delete(feedback).where(eq(feedback.interviewid, interviewId));
+  await db.delete(interview).where(buildInterviewFilter(interviewId, email));
+
+  return NextResponse.json({ ok: true });
+}
