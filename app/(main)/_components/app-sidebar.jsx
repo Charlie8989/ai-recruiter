@@ -3,7 +3,6 @@ import {
   LayoutDashboard,
   List,
   Settings,
-  Wallet2Icon,
 } from "lucide-react";
 
 import {
@@ -46,8 +45,8 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar className="bg-white text-gray-950">
-      <SidebarContent>
+    <Sidebar className="bg-white text-gray-950 [&_[data-sidebar=sidebar]]:bg-white [&_[data-sidebar=sidebar]]:text-gray-950">
+      <SidebarContent className="bg-white text-gray-950">
         <SidebarGroup>
         <Link href={"/dashboard"}>
           <SidebarGroupLabel className="text-2xl text-black font-bold my-4">

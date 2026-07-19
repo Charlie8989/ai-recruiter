@@ -38,7 +38,7 @@ const page = () => {
             </div>
           </div>
           <Button
-            className="bg-[#CA2A30] border-2 border-[#DB3C42] hover:bg-[#DB3C42] "
+            className="bg-[#CA2A30] border-2 border-[#DB3C42] hover:bg-[#DB3C42] text-white"
             onClick={handleLogout}
           >
             Log Out
