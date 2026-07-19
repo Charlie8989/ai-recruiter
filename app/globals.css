@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@neondatabase/auth/ui/tailwind";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -152,6 +151,12 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background: #f3f4f6;
+  color: #111827;
 }
 
 /* Custom Scrollbar */

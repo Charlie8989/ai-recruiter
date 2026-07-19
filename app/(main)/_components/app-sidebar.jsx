@@ -46,7 +46,7 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="bg-white text-gray-950">
       <SidebarContent>
         <SidebarGroup>
         <Link href={"/dashboard"}>

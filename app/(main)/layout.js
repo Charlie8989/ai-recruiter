@@ -7,7 +7,7 @@ export default function Layout({ children }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="w-full">
+      <div className="min-h-screen w-full bg-gray-100 text-gray-950">
         <WelcomeContainer />
          <Toaster />
         <div className="p-10">{children}</div>
