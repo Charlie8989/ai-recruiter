@@ -76,12 +76,28 @@ Team BOLOBOSS`
       }`}
     >
       <div className="flex items-center justify-between">
-        <div
-          className={`flex items-center justify-center rounded-full ${
-            viewDetail ? "bg-emerald-50 text-emerald-700" : "bg-[#eef2ff] text-[#2E318F]"
-          } ${compact ? "h-8 w-8" : "h-9 w-9"}`}
-        >
-          <BriefcaseBusiness className="h-4 w-4" />
+        <div className="flex items-center gap-2">
+          <div
+            className={`flex items-center justify-center rounded-full ${
+              viewDetail ? "bg-emerald-50 text-emerald-700" : "bg-[#eef2ff] text-[#2E318F]"
+            } ${compact ? "h-8 w-8" : "h-9 w-9"}`}
+          >
+            <BriefcaseBusiness className="h-4 w-4" />
+          </div>
+          <button
+            type="button"
+            title="Delete interview"
+            aria-label="Delete interview"
+            onClick={onDelete}
+            disabled={deleting}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-gray-400 transition hover:border-[#f0b4b4] hover:bg-[#fff1f1] hover:text-[#b42323] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {deleting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4" />
+            )}
+          </button>
         </div>
         <span className="rounded-full bg-[#eef3fb] px-3 py-1 text-xs font-semibold text-gray-700 ring-1 ring-[#cbd5e8]">
           {moment(interview?.created_at).format("DD MMM yyy")}
@@ -107,11 +123,15 @@ Team BOLOBOSS`
           </span>
         )}
       </div>
-      <div className={`mt-auto grid grid-cols-1 gap-2 sm:grid-cols-2 ${compact ? "pt-3" : "pt-4"}`}>
+      <div
+        className={`mt-auto grid grid-cols-1 gap-2 ${
+          viewDetail ? "" : "sm:grid-cols-2"
+        } ${compact ? "pt-3" : "pt-4"}`}
+      >
         {!viewDetail ? (
           <>
             <Button
-              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#9aa8c1] bg-[#e7ecf5] font-semibold text-gray-950 shadow-sm hover:bg-[#dfe6f2] sm:w-auto`}
+              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#9aa8c1] bg-[#e7ecf5] font-semibold text-gray-950 shadow-sm hover:bg-[#dfe6f2]`}
               onClick={copyURL}
               variant="outline"
             >
@@ -119,24 +139,11 @@ Team BOLOBOSS`
               Copy Link
             </Button>
             <Button
-              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center bg-[#2E318F] text-white hover:bg-[#242773] sm:w-auto`}
+              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center bg-[#2E318F] text-white hover:bg-[#242773]`}
               onClick={onSend}
             >
               <Send className="w-4 h-4" />
               Send Link
-            </Button>
-            <Button
-              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#f0b4b4] bg-[#fff1f1] font-semibold text-[#b42323] hover:bg-[#ffe4e4] sm:col-span-2`}
-              onClick={onDelete}
-              variant="outline"
-              disabled={deleting}
-            >
-              {deleting ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Trash2 className="w-4 h-4" />
-              )}
-              {compact ? "Delete" : "Delete Interview"}
             </Button>
           </>
         ) : (
@@ -149,19 +156,6 @@ Team BOLOBOSS`
                 <Eye className="w-4 h-4" /> View Feedback
               </Button>
             </Link>
-            <Button
-              className={`${compact ? "h-9 text-sm" : "h-10"} w-full justify-center border-[#f0b4b4] bg-[#fff1f1] font-semibold text-[#b42323] hover:bg-[#ffe4e4]`}
-              onClick={onDelete}
-              variant="outline"
-              disabled={deleting}
-            >
-              {deleting ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Trash2 className="w-4 h-4" />
-              )}
-              Delete
-            </Button>
           </>
         )}
       </div>
