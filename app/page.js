@@ -8,7 +8,10 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+import { redirect } from "next/navigation";
 import Link from "next/link";
+
+import { auth } from "@/lib/auth/server";
 
 const workflow = [
   {
@@ -35,10 +38,18 @@ const signals = [
   "Fast hiring review dashboard",
 ];
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const { data: session } = await auth.getSession();
+
+  if (session?.user) {
+    redirect("/dashboard");
+  }
+
   return (
     <main className="min-h-screen bg-[#e7ecf5] text-gray-950">
-      <section className="border-b border-[#d3dbea] bg-[#dfe6f2]">
+      <section className="sticky top-0 z-50 border-b border-[#d3dbea] bg-[#dfe6f2]/90 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-6 py-5 sm:px-8">
           <header className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-black tracking-tight">
