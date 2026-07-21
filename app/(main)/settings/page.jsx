@@ -41,10 +41,11 @@ const plannedSettings = [
 ];
 
 const SettingsPage = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const router = useRouter();
   const credits = user?.credits ?? 0;
   const [preferences, setPreferences] = useState(preferenceDefaults);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("boloboss-settings");
@@ -61,8 +62,27 @@ const SettingsPage = () => {
   };
 
   const handleLogout = async () => {
-    await authClient.signOut();
-    router.push("/");
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+    try {
+      const { error } = await authClient.signOut();
+
+      if (error) {
+        const response = await fetch("/api/local-sign-out", { method: "POST" });
+        if (!response.ok) {
+          throw new Error(error.message || "Unable to sign out");
+        }
+      }
+
+      setUser?.(null);
+      router.replace("/");
+      router.refresh();
+    } catch (error) {
+      toast.error(error?.message || "Sign out failed. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   if (!user) {
@@ -108,9 +128,10 @@ const SettingsPage = () => {
               className="border-[#cbd5e8] bg-[#eef3fb] text-gray-950 cursor-pointer hover:bg-[#e7ecf5]"
               variant="outline"
               onClick={handleLogout}
+              disabled={isLoggingOut}
             >
               <LogOut className="h-4 w-4" />
-              Log out
+              {isLoggingOut ? "Logging out..." : "Log out"}
             </Button>
           </div>
 
