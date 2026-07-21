@@ -105,7 +105,7 @@ const SettingsPage = () => {
               </div>
             </div>
             <Button
-              className="border-[#cbd5e8] bg-[#eef3fb] text-gray-950 hover:bg-[#e7ecf5]"
+              className="border-[#cbd5e8] bg-[#eef3fb] text-gray-950 cursor-pointer hover:bg-[#e7ecf5]"
               variant="outline"
               onClick={handleLogout}
             >
